@@ -27,5 +27,13 @@ namespace API.Controllers
         {
             return await this._context.Users.FindAsync(id);
         }
+
+        // [HttpPost]
+        // public async Task<ActionResult<AppUser>> AddUsers()
+        // {
+        //     var result = await this._context.Users.AddAsync();
+
+        //     return result;
+        // }
     }
 }

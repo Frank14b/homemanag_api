@@ -1,0 +1,7 @@
+<h1>{{title}}</h1>
+
+<ul *ngIf="users">
+  <li class="text-primary" *ngFor="let user of users">
+      {{user.id}} {{ user.email }}
+  </li>
+</ul>
