@@ -1,7 +1,7 @@
 
 namespace API.Controllers
 {
-    public class AccessController
+    public class AccessController: BaseApiController
     {
         
     }
