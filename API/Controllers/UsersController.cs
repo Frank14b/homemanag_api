@@ -3,18 +3,23 @@ using System.Text;
 using API.Data;
 using API.DTOs;
 using API.Entities;
+using API.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
+    [Authorize]
     public class UsersController : BaseApiController
     {
         private readonly DataContext _context;
+        private readonly ITokenService _tokenService;
 
-        public UsersController(DataContext context)
+        public UsersController(DataContext context, ITokenService tokenService)
         {
             this._context = context;
+            this._tokenService = tokenService;
         }
         
         [HttpGet]
@@ -24,14 +29,16 @@ namespace API.Controllers
             return users;
         }
 
+
         [HttpGet("{id}")]
         public async Task<ActionResult<AppUser>> GetUsers(int id)
         {
             return await this._context.Users.FindAsync(id);
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<ActionResult<AppUser>> LoginUsers(LoginDto data)
+        public async Task<ActionResult<UserDto>> LoginUsers(LoginDto data)
         {
             var result = await this._context.Users.SingleOrDefaultAsync(x => (x.UserName == data.Login) || (x.Email == data.Login));
 
@@ -45,9 +52,14 @@ namespace API.Controllers
                 if(computedHash[i] != result.PasswordHash[i]) return Unauthorized("Invalid Login / Password, User not found");
             }
 
-            return result;
+            return new UserDto 
+            {
+                Username = result.UserName,
+                Token = this._tokenService.CreateToken(result)
+            };
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<AppUser>> RegisterUsers(RegisterDto data)
         {

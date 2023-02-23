@@ -67,3 +67,11 @@
 /Users/kamgafrank/Documents/projects/homemanag/API/bin/Debug/net7.0/Microsoft.EntityFrameworkCore.Design.dll
 /Users/kamgafrank/Documents/projects/homemanag/API/bin/Debug/net7.0/Mono.TextTemplating.dll
 /Users/kamgafrank/Documents/projects/homemanag/API/bin/Debug/net7.0/System.CodeDom.dll
+/Users/kamgafrank/Documents/projects/homemanag/API/bin/Debug/net7.0/Microsoft.IdentityModel.Abstractions.dll
+/Users/kamgafrank/Documents/projects/homemanag/API/bin/Debug/net7.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/kamgafrank/Documents/projects/homemanag/API/bin/Debug/net7.0/Microsoft.IdentityModel.Logging.dll
+/Users/kamgafrank/Documents/projects/homemanag/API/bin/Debug/net7.0/Microsoft.IdentityModel.Tokens.dll
+/Users/kamgafrank/Documents/projects/homemanag/API/bin/Debug/net7.0/System.IdentityModel.Tokens.Jwt.dll
+/Users/kamgafrank/Documents/projects/homemanag/API/bin/Debug/net7.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/kamgafrank/Documents/projects/homemanag/API/bin/Debug/net7.0/Microsoft.IdentityModel.Protocols.dll
+/Users/kamgafrank/Documents/projects/homemanag/API/bin/Debug/net7.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
