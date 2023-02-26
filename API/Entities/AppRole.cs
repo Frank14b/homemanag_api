@@ -1,7 +1,9 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Entities
 {
+    [Table("Roles")]
     public class AppRole
     {
         public int Id {get; set;}
@@ -14,6 +16,6 @@ namespace API.Entities
 
         public int Status {get; set;}
 
-        public DateTime CreatedAt {get; set;}
+        public DateTime CreatedAt {get; set;} = DateTime.UtcNow;
     }
 }

@@ -75,3 +75,5 @@
 /Users/kamgafrank/Documents/projects/homemanag/API/bin/Debug/net7.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
 /Users/kamgafrank/Documents/projects/homemanag/API/bin/Debug/net7.0/Microsoft.IdentityModel.Protocols.dll
 /Users/kamgafrank/Documents/projects/homemanag/API/bin/Debug/net7.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Users/kamgafrank/Documents/projects/homemanag/API/bin/Debug/net7.0/AutoMapper.dll
+/Users/kamgafrank/Documents/projects/homemanag/API/bin/Debug/net7.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll

@@ -4,7 +4,6 @@ using System.Security.Claims;
 using System.Text;
 using API.Entities;
 using API.Interfaces;
-// using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
 
@@ -13,15 +12,21 @@ namespace API.Services
     public class TokenService : ITokenService
     {
         private readonly SymmetricSecurityKey _key;
+
+        private readonly IHostEnvironment env;
+
         public TokenService(IConfiguration config)
         {
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
         }
         public string CreateToken(AppUser user)
         {
+
+            var user_id = user.Id;
+
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.NameId, user.UserName)
+                new Claim(JwtRegisteredClaimNames.NameId, user_id.ToString())
             };
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
@@ -29,7 +34,7 @@ namespace API.Services
             var tokenDescriptor  = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateAndTime.Now.AddDays(7),
+                Expires = DateAndTime.Now.AddDays(1),
                 SigningCredentials = creds
             };
 

@@ -15,7 +15,7 @@
                 </li>
             </ul>
             <div>
-                <div class="nav-item position-relative" *ngIf="loggedIn" dropdown>
+                <div class="nav-item position-relative" *ngIf="accountService.currentUser$ | async" dropdown>
                     <a class="nav-link dropdown-toggle text-white" href="#" role="button" aria-controls="dropdown-basic" dropdownToggle>
                         Welcome {{this.model.login}}  
                     </a>
@@ -27,7 +27,7 @@
                         <li><a class="dropdown-item" href="#" (click)="logout()">logout</a></li>
                     </ul>
                 </div>
-                <form *ngIf="!loggedIn" #loginForm="ngForm" class="d-flex" (ngSubmit)="login()">
+                <form *ngIf="!(accountService.currentUser$ | async)" #loginForm="ngForm" class="d-flex" (ngSubmit)="login()">
                     <input [(ngModel)]="model.login" name="login" class="form-control me-2" placeholder="username" type="text" required="">
                     <input [(ngModel)]="model.password" name="password" class="form-control me-2" placeholder="password" type="password" required="">
                     <button class="btn btn-outline-success" type="submit">Login</button>
