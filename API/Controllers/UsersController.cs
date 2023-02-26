@@ -1,3 +1,4 @@
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -163,13 +164,11 @@ namespace API.Controllers
         [HttpPut("update-profile")]
         public async Task<ActionResult<ResultUpdateUserDto>> UpdateProfile(UpdateProfileDto data)
         {
-            var userIdentity = (User.Identity as ClaimsIdentity);
-            var id1 = userIdentity.FindFirst(JwtRegisteredClaimNames.NameId)?.Value;
-
-            // var id1 = this._userCommon.GetConectedUserId();
-            var id = 1;
             try
             {
+                var userIdentity = (User.Identity as ClaimsIdentity);
+                var id = Int32.Parse(userIdentity.Claims.FirstOrDefault().Value); // get user id from the auth token
+
                 var user = await this._context.Users.Where(x => x.Id == id && x.Status != (int)StatusEnum.delete).FirstOrDefaultAsync();
                 if (data.Firstname != null && data.Firstname.Length > 0) user.FirstName = data.Firstname;
                 if (data.Lastname != null && data.Lastname.Length > 0) user.LastName = data.Lastname;
@@ -191,7 +190,7 @@ namespace API.Controllers
             }
             catch (System.Exception)
             {
-                return BadRequest("current id "+id1);
+                return BadRequest("An error occured or User not found");
             }
         }
     }

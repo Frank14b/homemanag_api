@@ -1,5 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text.RegularExpressions;
 using API.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -31,13 +29,5 @@ namespace API.Commons
             return true;
         }
         public String Deletedkeyword {get;} = "deleted_";
-
-        public String GetConectedUserId()
-        {
-            var userIdentity = (User.Identity as ClaimsIdentity);
-            var id1 = userIdentity.FindFirst(JwtRegisteredClaimNames.NameId)?.Value;
-
-            return id1;
-        }
     }
 }
