@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using API.Entities;
 
 namespace API.UsersDTOs
 {
@@ -39,6 +40,16 @@ namespace API.UsersDTOs
     {
         [Required]
         public int Id {get; set;}
+    }
+
+    public class UpdateStatusUserDto
+    {
+        [Required]
+        public int Id {get; set;}
+        
+        [Required]
+        [EnumDataType(typeof(StatusEnum))]
+        public int Status {get; set;}
     }
 
     public class UpdateProfileDto

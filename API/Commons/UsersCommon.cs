@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Text.RegularExpressions;
 using API.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -29,5 +30,14 @@ namespace API.Commons
             return true;
         }
         public String Deletedkeyword {get;} = "deleted_";
+
+        public ArrayList UserStatus()
+        {
+            ArrayList _status = new ArrayList();
+            _status.Add(0);
+            _status.Add(1);
+
+            return _status;
+        }
     }
 }

@@ -1,5 +1,3 @@
-using System;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -104,9 +102,9 @@ namespace API.Controllers
         [HttpDelete("delete")]
         public async Task<ActionResult<ResultDeleteUserDto>> DeleteUser(DeleteUserDto data)
         {
-            var id = (int)data.Id;
             try
             {
+                var id = (int)data.Id;
                 var user = await this._context.Users.Where(x => x.Id == id && x.Status != (int)StatusEnum.delete).FirstOrDefaultAsync();
                 user.Status = (int)StatusEnum.delete;
                 user.Email = this._userCommon.Deletedkeyword + user.Email;
@@ -129,7 +127,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("edit")]
+        [HttpPost("edit")]
         public async Task<ActionResult<ResultUpdateUserDto>> UpdateUser(EditUserDto data)
         {
             try
@@ -161,7 +159,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("update-profile")]
+        [HttpPost("update-profile")]
         public async Task<ActionResult<ResultUpdateUserDto>> UpdateProfile(UpdateProfileDto data)
         {
             try
@@ -191,6 +189,28 @@ namespace API.Controllers
             catch (System.Exception)
             {
                 return BadRequest("An error occured or User not found");
+            }
+        }
+
+        [HttpPut("status")]
+        public async Task<ActionResult<ResultUpdateUserDto>> ChangeStatus(UpdateStatusUserDto data)
+        {
+            try
+            {
+                var id = data.Id;
+                var _status = this._userCommon.UserStatus();
+
+                var user = await this._context.Users.Where(x => x.Id == id && x.Status != (int)StatusEnum.delete).FirstOrDefaultAsync();
+                if(!_status.Contains(data.Status)) return BadRequest("User status should be 0:inactive or 1:active");
+                user.Status = data.Status;
+
+                await this._context.SaveChangesAsync();
+
+                return this._mapper.Map<ResultUpdateUserDto>(user);
+            }
+            catch (System.Exception)
+            {
+                return BadRequest("An error occured or user not found");
             }
         }
     }
