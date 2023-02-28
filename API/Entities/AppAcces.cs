@@ -13,7 +13,9 @@ namespace API.Entities
 
         public string ApiPath {get; set;}
 
-        public string Status {get; set;}
+        public int Status {get; set;}
+
+        public List<AppRoleAcces> RoleAcces {get; set;}
 
         public DateTime CreatedAt {get; set;} = DateTime.UtcNow;
     }

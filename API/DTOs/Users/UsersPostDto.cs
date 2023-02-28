@@ -62,9 +62,9 @@ namespace API.UsersDTOs
 
         public string Email {get; set;}
 
-        // [Required]
-        // [MinLength(8)]
-        // [RegularExpression("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")]
+        [Required]
+        [MinLength(8)]
+        [RegularExpression("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")]
         public string CurrentPassword {get; set;}
 
         [RegularExpression("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")]

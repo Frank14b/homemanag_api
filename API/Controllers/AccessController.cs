@@ -1,5 +1,7 @@
 
 using API.Data;
+using API.Entities;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
@@ -11,6 +13,11 @@ namespace API.Controllers
         public AccessController(DataContext context)
         {
             this._context = context;
+        }
+
+        public Task<ResultContext<AppAcces>> CreateAccess()
+        {
+            
         }
     }
 }

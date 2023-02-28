@@ -44,5 +44,7 @@ namespace API.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public DateTime UpdatedAt { get; set; }
+        
+        public List<AppRole> Roles {get; set;}
     }
 }
