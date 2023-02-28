@@ -13,7 +13,7 @@ namespace API.Entities
 
         public string ApiPath {get; set;}
 
-        public int Status {get; set;}
+        public int Status {get; set;} = (int)StatusEnum.enable;
 
         public List<AppRoleAcces> RoleAcces {get; set;}
 

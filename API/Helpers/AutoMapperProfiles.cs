@@ -1,4 +1,5 @@
 
+using API.AccessDTOs;
 using API.Entities;
 using API.UsersDTOs;
 using AutoMapper;
@@ -11,6 +12,7 @@ namespace API.Helpers
         {
             CreateMap<AppUser, ResultUpdateUserDto>();
             CreateMap<AppUser, ResultloginDto>();
+            CreateMap<AppAcces, AccessResultDto>();
         }
     }
 }

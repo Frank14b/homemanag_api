@@ -127,7 +127,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost("edit")]
+        [HttpPut("edit")]
         public async Task<ActionResult<ResultUpdateUserDto>> UpdateUser(EditUserDto data)
         {
             try
@@ -159,7 +159,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost("update-profile")]
+        [HttpPut("update-profile")]
         public async Task<ActionResult<ResultUpdateUserDto>> UpdateProfile(UpdateProfileDto data)
         {
             try

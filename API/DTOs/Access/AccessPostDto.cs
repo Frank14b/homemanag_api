@@ -2,47 +2,42 @@
 using System.ComponentModel.DataAnnotations;
 using API.Entities;
 
-namespace API.DTOs.Access
+namespace API.AccessDTOs
 {
-    public class AccessPostDto
+    public class CreateAccessDto
     {
-        public class CreateAccessDto
-        {
-            [Required]
-            public string Name { get; set; }
+        [Required]
+        public string Name { get; set; }
 
-            public string Description { get; set; }
+        public string Description { get; set; }
 
-            [Required]
-            public string MiddleWare { get; set; }
-            
-            public string ApiPath { get; set; }
+        [Required]
+        public string MiddleWare { get; set; }
 
-            public int Status { get; set; } = (int)StatusEnum.enable;
-        }
+        public string ApiPath { get; set; }
+    }
 
-        public class UpdateAccessDto
-        {
-            [Required]
-            public int Id {get; set;}
+    public class UpdateAccessDto
+    {
+        [Required]
+        public int Id { get; set; }
 
-            [Required]
-            public string Name { get; set; }
-            
-            public string Description { get; set; }
+        [Required]
+        public string Name { get; set; }
 
-            [Required]
-            public string MiddleWare { get; set; }
-            
-            public string ApiPath { get; set; }
+        public string Description { get; set; }
 
-            public int Status { get; set; } = (int)StatusEnum.enable;
-        }
+        [Required]
+        public string MiddleWare { get; set; }
 
-        public class DeleteAccessDto
-        {
-            [Required]
-            public int Id {get; set;}
-        }
+        public string ApiPath { get; set; }
+
+        public int Status { get; set; } = (int)StatusEnum.enable;
+    }
+
+    public class DeleteAccessDto
+    {
+        [Required]
+        public int Id { get; set; }
     }
 }
