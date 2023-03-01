@@ -32,5 +32,6 @@ namespace API.DTOs.Roles
     {
         [Required]
         public int Id {get; set;}
+
     }
 }

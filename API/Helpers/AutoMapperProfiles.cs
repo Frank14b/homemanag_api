@@ -13,6 +13,8 @@ namespace API.Helpers
             CreateMap<AppUser, ResultUpdateUserDto>();
             CreateMap<AppUser, ResultloginDto>();
             CreateMap<AppAcces, AccessResultDto>();
+            CreateMap<AppAcces, AccessListResultDto>();
+            CreateMap<CreateAccessDto, AppAcces>();
         }
     }
 }

@@ -1,48 +1,129 @@
 
 using API.AccessDTOs;
+using API.Commons;
 using API.Data;
+using API.Entities;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
     [Authorize]
-    public class AccessController: BaseApiController
+    public class AccessController : BaseApiController
     {
         private readonly DataContext _context;
-        public AccessController(DataContext context)
+
+        private AccessCommon _accessCommon;
+
+        private IMapper _mapper;
+        public AccessController(DataContext context, IMapper mapper)
         {
             this._context = context;
+            this._mapper = mapper;
+            this._accessCommon = new AccessCommon(context);
         }
 
         [HttpPost("add")]
         public async Task<ActionResult<AccessResultDto>> CreateAccess(CreateAccessDto data)
         {
-            return BadRequest("test");
-        }
+            try
+            {
+                if (await this._accessCommon.AccessExist(data)) return BadRequest("Access Name | MiddleWare already in used");
+                
+                var _access = this._mapper.Map<AppAcces>(data);
 
+                this._context.Access.Add(_access);
+
+                await this._context.SaveChangesAsync();
+
+                var result = this._mapper.Map<AccessResultDto>(_access);
+
+                return result;
+            }
+            catch (System.Exception)
+            {
+                return BadRequest("Access can't be created");
+            }
+        }
+        
         [HttpGet("getall")]
-        public ActionResult<IEnumerable<AccessResultDto>> GetAllAccess()
+        public ActionResult<IEnumerable<AppAcces>> GetAllAccess()
         {
-            return BadRequest("test");
+            try
+            {
+                var _access = this._context.Access.Where(x => x.Status != (int)StatusEnum.delete).ToList();
+                // var result = this._mapper.Map<AccessListResultDto>(_access);
+                return _access;
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<AccessResultDto>> GetOneAccess(int id)
         {
-            return BadRequest("test");
+            try
+            {
+                var _access = await this._context.Access.Where(x => x.Id == id && x.Status == (int)StatusEnum.enable).FirstOrDefaultAsync();
+                var result = this._mapper.Map<AccessResultDto>(_access);
+                return result;
+            }
+            catch (System.Exception)
+            {
+                return BadRequest("An error occured or access not found");
+            }
         }
 
         [HttpDelete("delete")]
         public async Task<ActionResult<DeleteAccessResultDto>> DeleteAccess(DeleteAccessDto data)
         {
-            return BadRequest("test");
+            try
+            {
+                var _access = await this._context.Access.Where(x => x.Id == data.Id && x.Status == (int)StatusEnum.enable).FirstOrDefaultAsync();
+                _access.Status = (int)StatusEnum.delete;
+                await this._context.SaveChangesAsync();
+
+                return new DeleteAccessResultDto
+                {
+                    Status = true,
+                    Message = "The giving Access has been deleted"
+                };
+            }
+            catch (System.Exception)
+            {
+                return new DeleteAccessResultDto
+                {
+                    Status = false,
+                    Message = "The giving Access counldn't been deleted"
+                };
+            }
         }
 
         [HttpPut("update")]
         public async Task<ActionResult<AccessResultDto>> UpdateAccess(UpdateAccessDto data)
         {
-            return BadRequest("test");
+            try
+            {
+                var _access = await this._context.Access.Where(x => x.Id == data.Id && x.Status != (int)StatusEnum.delete).FirstOrDefaultAsync();
+                _access.Name = (data.Name != null) ? data.Name : _access.Name;
+                _access.Description = (data.Description != null) ? data.Description : _access.Description;
+                _access.MiddleWare = (data.MiddleWare != null) ? data.MiddleWare : _access.MiddleWare;
+                _access.ApiPath = (data.ApiPath != null) ? data.ApiPath : _access.ApiPath;
+
+                await this._context.SaveChangesAsync();
+
+                var result = this._mapper.Map<AccessResultDto>(_access);
+
+                return result;
+            }
+            catch (System.Exception)
+            {
+                return BadRequest("The giving access couldn't been edited");
+            }
         }
     }
 }
