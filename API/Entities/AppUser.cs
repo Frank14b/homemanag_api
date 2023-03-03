@@ -27,6 +27,8 @@ namespace API.Entities
         [EnumDataType(typeof(RoleEnum))]
         public int Role { get; set; }
 
+        public List<AppBusiness> Businesses {get; set;}
+
         public DateTime LastLogin { get; set; }
 
         public DateOnly DateOfBirth { get; set; }

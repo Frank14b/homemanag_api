@@ -16,5 +16,7 @@ namespace API.Data
         public DbSet<AppRole> Roles {get; set;}
 
         public DbSet<AppRoleAcces> Roleaccess {get; set;}
+
+        public DbSet<AppBusiness> Business {get; set;}
     }
 }

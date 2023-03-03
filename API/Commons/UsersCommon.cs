@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Text.RegularExpressions;
 using API.Data;
+using API.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,12 @@ namespace API.Commons
         public UsersCommon(DataContext context)
         {
             this._context = context;
+        }
+
+        public async Task<Boolean> UserIdExist(int id)
+        {
+            var result = await this._context.Users.Where(x => x.Status == (int)StatusEnum.enable || x.Id == id).AnyAsync();
+            return result;
         }
         public async Task<Boolean> UserNameExist(string username)
         {

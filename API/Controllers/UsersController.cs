@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using API.Commons;
@@ -105,6 +104,9 @@ namespace API.Controllers
             try
             {
                 var id = (int)data.Id;
+
+                if (await this._userCommon.UserIdExist(id)) return BadRequest("User not found");
+
                 var user = await this._context.Users.Where(x => x.Id == id && x.Status != (int)StatusEnum.delete).FirstOrDefaultAsync();
                 user.Status = (int)StatusEnum.delete;
                 user.Email = this._userCommon.Deletedkeyword + user.Email;
@@ -133,6 +135,9 @@ namespace API.Controllers
             try
             {
                 var id = (int)data.Id;
+
+                if (await this._userCommon.UserIdExist(id)) return BadRequest("User not found");
+
                 var user = await this._context.Users.Where(x => x.Id == id && x.Status != (int)StatusEnum.delete).FirstOrDefaultAsync();
                 if (data.Email.Length > 0) user.Email = data.Email;
                 if (data.Firstname.Length > 0) user.FirstName = data.Firstname;
@@ -164,8 +169,9 @@ namespace API.Controllers
         {
             try
             {
-                var userIdentity = (User.Identity as ClaimsIdentity);
-                var id = Int32.Parse(userIdentity.Claims.FirstOrDefault().Value); // get user id from the auth token
+                var id = this.connected_user_id;
+
+                if (await this._userCommon.UserIdExist(id)) return BadRequest("User not found");
 
                 var user = await this._context.Users.Where(x => x.Id == id && x.Status != (int)StatusEnum.delete).FirstOrDefaultAsync();
                 if (data.Firstname != null && data.Firstname.Length > 0) user.FirstName = data.Firstname;
@@ -199,6 +205,8 @@ namespace API.Controllers
             {
                 var id = data.Id;
                 var _status = this._userCommon.UserStatus();
+
+                if (await this._userCommon.UserIdExist(id)) return BadRequest("User not found");
 
                 var user = await this._context.Users.Where(x => x.Id == id && x.Status != (int)StatusEnum.delete).FirstOrDefaultAsync();
                 if(!_status.Contains(data.Status)) return BadRequest("User status should be 0:inactive or 1:active");

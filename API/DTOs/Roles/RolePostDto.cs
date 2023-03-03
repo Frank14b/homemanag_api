@@ -26,6 +26,8 @@ namespace API.DTOs.Roles
 
         [Required]
         public int BusinesId {get; set;}
+
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 
     public class DeleteRolesDto

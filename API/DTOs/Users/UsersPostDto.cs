@@ -50,6 +50,8 @@ namespace API.UsersDTOs
         [Required]
         [EnumDataType(typeof(StatusEnum))]
         public int Status {get; set;}
+
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 
     public class UpdateProfileDto
@@ -69,6 +71,8 @@ namespace API.UsersDTOs
 
         [RegularExpression("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")]
         public string NewPassword {get; set;}
+
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 
     public class EditUserDto
@@ -81,5 +85,7 @@ namespace API.UsersDTOs
         public string Lastname {get; set;}
 
         public string Email {get; set;}
+
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

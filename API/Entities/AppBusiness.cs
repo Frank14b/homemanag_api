@@ -8,6 +8,9 @@ namespace API.Entities
         public int Id {get; set;}
 
         [Required]
+        public AppUser User {get; set;}
+
+        [Required]
         [MinLength(3)]
         public string Name {get; set;}
 

@@ -38,7 +38,10 @@ namespace API.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Status")
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -99,9 +102,14 @@ namespace API.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
-                    b.ToTable("AppBusiness");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Business");
                 });
 
             modelBuilder.Entity("API.Entities.AppRole", b =>
@@ -128,6 +136,9 @@ namespace API.Data.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -214,6 +225,17 @@ namespace API.Data.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("API.Entities.AppBusiness", b =>
+                {
+                    b.HasOne("API.Entities.AppUser", "User")
+                        .WithMany("Businesses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("API.Entities.AppRole", b =>
                 {
                     b.HasOne("API.Entities.AppBusiness", "Busines")
@@ -257,6 +279,11 @@ namespace API.Data.Migrations
             modelBuilder.Entity("API.Entities.AppRole", b =>
                 {
                     b.Navigation("RoleAcces");
+                });
+
+            modelBuilder.Entity("API.Entities.AppUser", b =>
+                {
+                    b.Navigation("Businesses");
                 });
 #pragma warning restore 612, 618
         }
