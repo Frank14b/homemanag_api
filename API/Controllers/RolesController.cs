@@ -4,7 +4,6 @@ using API.Data;
 using API.DTOs.Roles;
 using API.Entities;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,12 +15,14 @@ namespace API.Controllers
         private readonly DataContext _context;
         private IMapper _mapper;
         private RolesCommon _rolesCommon;
+        private BusinessCommon _businessCommon;
 
         public RolesController(DataContext context, IMapper mapper)
         {
             this._context = context;
             this._mapper = mapper;
             this._rolesCommon = new RolesCommon(context);
+            this._businessCommon = new BusinessCommon(context);
         }
 
         [HttpPost("add")]
@@ -29,13 +30,15 @@ namespace API.Controllers
         {
             try
             {
-                if (await this._rolesCommon.RoleExist(data)) return BadRequest("Roles Name already in used");
+                if (await this._rolesCommon.RoleExist(data.Title, data.BusinessId, 0)) return BadRequest("Roles Name already in used");
 
-                
-                
+                if(!await this._businessCommon.BusinessIdExist(data.BusinessId)) return NotFound("Please Provide a Valid Business ID");
+
                 var _role = this._mapper.Map<AppRole>(data);
 
-                _role.Code = _role.Title.GetHashCode()+"$"+_role.Busines.Id;
+                _role.Code = data.Title.GetHashCode()+"$"+data.BusinessId;
+                _role.Business = this._businessCommon.GetBusinessById(data.BusinessId);
+                _role.Status = (int)StatusEnum.enable;
 
                 this._context.Roles.Add(_role);
 
@@ -52,12 +55,11 @@ namespace API.Controllers
         }
         
         [HttpGet("getall/{businessid}")]
-        public ActionResult<IEnumerable<AppRole>> GetAllRoles(int businessid)
+        public async Task<ActionResult<IEnumerable<AppRole>>> GetAllRoles(int businessid)
         {
             try
             {
-                var _role = this._context.Roles.Where(x => x.Status != (int)StatusEnum.delete && x.Busines.Id == businessid).ToList();
-                // var result = this._mapper.Map<RolesListResultDto>(_access);
+                var _role = await this._context.Roles.Where(x => x.Status != (int)StatusEnum.delete && x.BusinessId == businessid).ToListAsync();
                 return _role;
             }
             catch (System.Exception)
@@ -111,19 +113,23 @@ namespace API.Controllers
         {
             try
             {
-                var _access = await this._context.Roles.Where(x => x.Id == data.Id && x.Status != (int)StatusEnum.delete).FirstOrDefaultAsync();
+                var _role = await this._context.Roles.Where(x => x.Id == data.Id && x.Status != (int)StatusEnum.delete).Include("Busines").FirstOrDefaultAsync();
 
-                this._mapper.Map<AppRole>(data);
+                _role.Title = (data.Title != null) ? data.Title : _role.Title;
+                _role.Description = (data.Description != null) ? data.Description : _role.Description;
+                _role.Status = (int)StatusEnum.enable;
+
+                if (await this._rolesCommon.RoleExist(_role.Title, 1, _role.Id)) return BadRequest("Roles Name already in used");
 
                 await this._context.SaveChangesAsync();
 
-                var result = this._mapper.Map<RoleResultDtos>(_access);
+                var result = this._mapper.Map<RoleResultDtos>(_role);
 
                 return result;
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
-                return BadRequest("The giving role couldn't be edited");
+                return BadRequest("The giving role couldn't be edited" + ex);
             }
         }
     }

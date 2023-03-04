@@ -24,8 +24,6 @@ namespace API.UsersDTOs
 
         public string Lastname {get; set;}
 
-        public int Status {get; set;}
-
         [Required]
         [EmailAddress]
         public string Email {get; set;}
@@ -56,12 +54,17 @@ namespace API.UsersDTOs
 
     public class UpdateProfileDto
     {
+        [MinLength(1)]
         public string Username {get; set;}
 
+        [MinLength(1)]
         public string Firstname {get; set;}
 
+        [MinLength(1)]
         public string Lastname {get; set;}
 
+        [MinLength(1)]
+        [EmailAddress]
         public string Email {get; set;}
 
         [Required]
@@ -78,12 +81,18 @@ namespace API.UsersDTOs
     public class EditUserDto
     {
         public int Id {get; set;}
+
+        [MinLength(1)]
         public string Username {get; set;}
 
+        [MinLength(1)]
         public string Firstname {get; set;}
 
+        [MinLength(1)]
         public string Lastname {get; set;}
 
+        [MinLength(1)]
+        [EmailAddress]
         public string Email {get; set;}
 
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

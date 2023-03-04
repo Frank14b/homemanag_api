@@ -1,6 +1,6 @@
 
-using API.AccessDTOs;
 using API.Data;
+using API.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,9 +14,10 @@ namespace API.Commons
         {
             this._context = context;
         }
-        public async Task<Boolean> AccessExist(CreateAccessDto data)
+        public async Task<Boolean> AccessExist(string name, string middleware, int id)
         {
-            return await this._context.Access.Where(x => x.Name == data.Name || x.MiddleWare == data.MiddleWare).AnyAsync();
+            if(id == 0) return await this._context.Access.Where(x => (x.Name == name || x.MiddleWare == middleware) && x.Status != (int)StatusEnum.delete).AnyAsync();
+            else return await this._context.Access.Where(x => (x.Name == name || x.MiddleWare == middleware) && x.Id != id && x.Status != (int)StatusEnum.delete).AnyAsync();
         }
     }
 }

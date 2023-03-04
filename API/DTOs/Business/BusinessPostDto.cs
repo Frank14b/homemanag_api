@@ -1,6 +1,5 @@
 
 using System.ComponentModel.DataAnnotations;
-using API.Entities;
 
 namespace API.DTOs.Business
 {
@@ -33,13 +32,7 @@ namespace API.DTOs.Business
 
         [EmailAddress]
         public string Email {get; set;}
-
-        public string Reference {get; set;}
-        public int UserId {get; set;}
         
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        public DateTime UpdatedAt { get; set; }
     }
 
     public class UpdateBusinessDto
@@ -50,7 +43,6 @@ namespace API.DTOs.Business
         [MinLength(3)]
         public string Name {get; set;}
         
-        [MinLength(3)]
         public string Description {get; set;}
 
         [MinLength(3)]
@@ -77,17 +69,11 @@ namespace API.DTOs.Business
         [MinLength(3)]
         [EmailAddress]
         public string Email {get; set;}
-
-        [EnumDataType(typeof(StatusEnum))]
-        public int Status {get; set;} = (int)StatusEnum.enable;
-
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 
     public class DeleteBusinessDto
     {
         [Required]
         public int Id {get; set;}
-
     }
 }

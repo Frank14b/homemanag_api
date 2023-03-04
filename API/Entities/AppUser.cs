@@ -1,8 +1,9 @@
-using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Entities
 {
+    [Table("Users")]
     public class AppUser
     {
         public int Id { get; set; }
@@ -27,7 +28,7 @@ namespace API.Entities
         [EnumDataType(typeof(RoleEnum))]
         public int Role { get; set; }
 
-        public List<AppBusiness> Businesses {get; set;}
+        public List<AppBusiness> Business {get; set;} = new();
 
         public DateTime LastLogin { get; set; }
 

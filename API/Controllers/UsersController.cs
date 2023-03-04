@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using API.Commons;
@@ -28,41 +29,56 @@ namespace API.Controllers
             this._userCommon = new UsersCommon(context);
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<AppUser>> GetUsers()
+        [HttpGet("getall")]
+        public async Task<ActionResult<IEnumerable<ResultAllUserDto>>> GetUsers()
         {
-            var users = this._context.Users.ToList();
-            return users;
+            var users = await this._context.Users.Include(p => p.Business).ToListAsync();
+
+            var result = this._mapper.Map<IEnumerable<ResultAllUserDto>>(users);
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<AppUser>> GetUsers(int id)
+        public async Task<ActionResult<ResultAllUserDto>> GetUsers(int id)
         {
-            return await this._context.Users.FindAsync(id);
+            var user = await this._context.Users.Where(x => x.Id == id).Include(p => p.Business).FirstAsync();
+
+            var result = this._mapper.Map<ResultAllUserDto>(user);
+
+            return Ok(result);
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<ResultloginDto>> LoginUsers(LoginDto data)
         {
-            var result = await this._context.Users.SingleOrDefaultAsync(x => (x.UserName == data.Login) || (x.Email == data.Login));
-
-            if (result == null) Unauthorized("Invalid Login / Password, User not found");
-
-            using var hmac = new HMACSHA512(result.PasswordSalt);
-
-            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(data.Password));
-
-            for (int i = 0; i < computedHash.Length; i++)
+            try
             {
-                if (computedHash[i] != result.PasswordHash[i]) return Unauthorized("Invalid Login / Password, User not found");
+                var result = await this._context.Users.SingleOrDefaultAsync(x => (x.UserName == data.Login) || (x.Email == data.Login));
+
+                if (result == null) Unauthorized("Invalid Login / Password, User not found");
+
+                using var hmac = new HMACSHA512(result.PasswordSalt);
+
+                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(data.Password));
+
+                for (int i = 0; i < computedHash.Length; i++)
+                {
+                    if (computedHash[i] != result.PasswordHash[i]) return Unauthorized("Invalid Login / Password, User not found");
+                }
+
+                var finalresult = this._mapper.Map<ResultloginDto>(result);
+
+                finalresult.Token = this._tokenService.CreateToken(result);
+
+                return finalresult;
             }
+            catch (System.Exception)
+            {
 
-            var finalresult = this._mapper.Map<ResultloginDto>(result);
-
-            finalresult.Token = this._tokenService.CreateToken(result);
-
-            return finalresult;
+                return BadRequest("An error occured or user not found");
+            }
         }
 
         [AllowAnonymous]
@@ -169,7 +185,8 @@ namespace API.Controllers
         {
             try
             {
-                var id = this.connected_user_id;
+                ClaimsPrincipal currentUser = this.User;
+                var id = Int32.Parse(currentUser.FindFirst(ClaimTypes.NameIdentifier).Value);
 
                 if (await this._userCommon.UserIdExist(id)) return BadRequest("User not found");
 
@@ -209,7 +226,7 @@ namespace API.Controllers
                 if (await this._userCommon.UserIdExist(id)) return BadRequest("User not found");
 
                 var user = await this._context.Users.Where(x => x.Id == id && x.Status != (int)StatusEnum.delete).FirstOrDefaultAsync();
-                if(!_status.Contains(data.Status)) return BadRequest("User status should be 0:inactive or 1:active");
+                if (!_status.Contains(data.Status)) return BadRequest("User status should be 0:inactive or 1:active");
                 user.Status = data.Status;
 
                 await this._context.SaveChangesAsync();

@@ -1,5 +1,5 @@
 using API.Data;
-using API.DTOs.Roles;
+using API.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Commons
@@ -12,10 +12,23 @@ namespace API.Commons
         {
             this._context = context;
         }
-        public async Task<Boolean> RoleExist(CreateRolesDto data)
+        public async Task<Boolean> RoleExist(string title, int businessid, int id)
         {
-            var result = await this._context.Roles.Where(x => x.Title == data.Title || x.Busines.Id == data.BusinesId).AnyAsync();
+            if (id == 0)
+            {
+                var result = await this._context.Roles.Where(x => x.Title == title && x.BusinessId == businessid).AnyAsync();
+                return result;
+            }
+            else
+            {
+                var result = await this._context.Roles.Where(x => x.Title == title && x.BusinessId == businessid && x.Id != id).AnyAsync();
+                return result;
+            }
+        }
 
+        public AppRole GetRoleById(int id)
+        {
+            var result = this._context.Roles.Where(x => x.Id == id).FirstOrDefault();
             return result;
         }
     }

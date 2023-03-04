@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230303025249_InitialCreate")]
+    [Migration("20230304053108_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -121,7 +121,7 @@ namespace API.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("BusinesId")
+                    b.Property<int>("BusinessId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Code")
@@ -146,7 +146,7 @@ namespace API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BusinesId");
+                    b.HasIndex("BusinessId");
 
                     b.ToTable("Roles");
                 });
@@ -231,7 +231,7 @@ namespace API.Data.Migrations
             modelBuilder.Entity("API.Entities.AppBusiness", b =>
                 {
                     b.HasOne("API.Entities.AppUser", "User")
-                        .WithMany("Businesses")
+                        .WithMany("Business")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -241,13 +241,13 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.AppRole", b =>
                 {
-                    b.HasOne("API.Entities.AppBusiness", "Busines")
+                    b.HasOne("API.Entities.AppBusiness", "Business")
                         .WithMany("Roles")
-                        .HasForeignKey("BusinesId")
+                        .HasForeignKey("BusinessId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Busines");
+                    b.Navigation("Business");
                 });
 
             modelBuilder.Entity("API.Entities.AppRoleAcces", b =>
@@ -286,7 +286,7 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.AppUser", b =>
                 {
-                    b.Navigation("Businesses");
+                    b.Navigation("Business");
                 });
 #pragma warning restore 612, 618
         }

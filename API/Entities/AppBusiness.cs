@@ -1,14 +1,14 @@
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using API.DTOs.Roles;
 
 namespace API.Entities
 {
+    [Table("Business")]
     public class AppBusiness
     {
         public int Id {get; set;}
-
-        [Required]
-        public AppUser User {get; set;}
 
         [Required]
         [MinLength(3)]
@@ -48,6 +48,9 @@ namespace API.Entities
 
         public DateTime UpdatedAt { get; set; }
         
-        public List<AppRole> Roles {get; set;}
+        public List<RoleResultDtos> Roles {get; set;} = new List<RoleResultDtos>();
+
+        public int UserId {get; set;}
+        public AppUser User {get; set;}
     }
 }

@@ -29,6 +29,11 @@ namespace API.Commons
         {
             return await this._context.Users.AnyAsync(x => x.Email.ToLower() == useremail.ToLower());
         }
+        public AppUser GetUserById(int id)
+        {
+            var result = this._context.Users.Where(x => x.Status == (int)StatusEnum.enable || x.Id == id).FirstOrDefault();
+            return result;
+        }
         public Boolean IsValidPassword(string password)
         {
             // Validate strong password

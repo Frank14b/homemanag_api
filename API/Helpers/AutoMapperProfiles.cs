@@ -13,15 +13,16 @@ namespace API.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<AppUser, ResultUpdateUserDto>();
+            CreateMap<AppUser, ResultAllUserDto>();
             CreateMap<AppUser, ResultloginDto>();
             CreateMap<AppAcces, AccessResultDto>();
             CreateMap<AppAcces, AccessListResultDto>();
             CreateMap<CreateAccessDto, AppAcces>();
-            CreateMap<CreateRolesDto, AppRole>();
-            CreateMap<UpdateRolesDto, AppRole>();
+            // CreateMap<CreateRolesDto, AppRole>();
+            // CreateMap<UpdateRolesDto, AppRole>();
             CreateMap<AppRole, RoleResultDtos>();
-            CreateMap<DeleteRolesDto, AppRole>();
-            CreateMap<DeleteAccessDto, AppAcces>();
+            // CreateMap<DeleteRolesDto, AppRole>();
+            // CreateMap<DeleteAccessDto, AppAcces>();
             CreateMap<CreateBusinessDto, AppBusiness>();
             CreateMap<AppBusiness, BusinessResultDtos>();
         }

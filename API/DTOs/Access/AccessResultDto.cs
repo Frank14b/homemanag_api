@@ -13,11 +13,9 @@ namespace API.AccessDTOs
 
         public string MiddleWare { get; set; }
 
-        public string ApiPath { get; set; }
+        // public string ApiPath { get; set; }
         
         public int Status { get; set; }
-
-        public AppRoleAcces RoleAcces {get; set;}
     }
 
     public class AccessListResultDto
@@ -30,7 +28,7 @@ namespace API.AccessDTOs
 
         public string MiddleWare { get; set; }
 
-        public string ApiPath { get; set; }
+        // public string ApiPath { get; set; }
 
         public int Status { get; set; }
     }

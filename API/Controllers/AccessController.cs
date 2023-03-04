@@ -30,7 +30,7 @@ namespace API.Controllers
         {
             try
             {
-                if (await this._accessCommon.AccessExist(data)) return BadRequest("Access Name | MiddleWare already in used");
+                if (await this._accessCommon.AccessExist(data.Name, data.MiddleWare, 0)) return BadRequest("Access Name | MiddleWare already in used");
                 
                 var _access = this._mapper.Map<AppAcces>(data);
 
@@ -69,6 +69,7 @@ namespace API.Controllers
             try
             {
                 var _access = await this._context.Access.Where(x => x.Id == id && x.Status == (int)StatusEnum.enable).FirstOrDefaultAsync();
+                if(_access == null) return NotFound("Access Not Found or Invalid Access ID");
                 var result = this._mapper.Map<AccessResultDto>(_access);
                 return result;
             }
@@ -84,6 +85,8 @@ namespace API.Controllers
             try
             {
                 var _access = await this._context.Access.Where(x => x.Id == data.Id && x.Status == (int)StatusEnum.enable).FirstOrDefaultAsync();
+                if(_access == null) return NotFound("Access Not Found or Invalid ID");
+                
                 _access.Status = (int)StatusEnum.delete;
                 await this._context.SaveChangesAsync();
 
@@ -109,10 +112,15 @@ namespace API.Controllers
             try
             {
                 var _access = await this._context.Access.Where(x => x.Id == data.Id && x.Status != (int)StatusEnum.delete).FirstOrDefaultAsync();
+                
+                if(_access == null) return NotFound("Access Not Found or Invalid ID");
+
                 _access.Name = (data.Name != null) ? data.Name : _access.Name;
                 _access.Description = (data.Description != null) ? data.Description : _access.Description;
                 _access.MiddleWare = (data.MiddleWare != null) ? data.MiddleWare : _access.MiddleWare;
                 _access.ApiPath = (data.ApiPath != null) ? data.ApiPath : _access.ApiPath;
+
+                if (await this._accessCommon.AccessExist(_access.Name, _access.MiddleWare, _access.Id)) return BadRequest("Access Name | MiddleWare already in used");
 
                 await this._context.SaveChangesAsync();
 

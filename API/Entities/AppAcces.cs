@@ -1,6 +1,9 @@
 
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace API.Entities
 {
+    [Table("Access")]
     public class AppAcces
     {
         public int Id {get; set;}
@@ -15,7 +18,7 @@ namespace API.Entities
 
         public int Status {get; set;} = (int)StatusEnum.enable;
 
-        public List<AppRoleAcces> RoleAcces {get; set;}
+        public List<AppRoleAcces> RoleAcces {get; set;} = new List<AppRoleAcces>();
 
         public DateTime CreatedAt {get; set;} = DateTime.UtcNow;
 

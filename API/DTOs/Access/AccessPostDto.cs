@@ -31,8 +31,6 @@ namespace API.AccessDTOs
         public string MiddleWare { get; set; }
 
         public string ApiPath { get; set; }
-
-        public int Status { get; set; } = (int)StatusEnum.enable;
     }
 
     public class DeleteAccessDto

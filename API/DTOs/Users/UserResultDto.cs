@@ -1,4 +1,6 @@
 
+using API.DTOs.Business;
+
 namespace API.UsersDTOs
 {
     public class ResultloginDto
@@ -35,5 +37,20 @@ namespace API.UsersDTOs
         public DateOnly DateOfBirth { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+    }
+
+    public class ResultAllUserDto
+    {
+        public int Id { get; set; }
+        public string UserName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public int Status { get; set; }
+        public string Email { get; set; }
+        public DateTime LastLogin { get; set; }
+        public DateOnly DateOfBirth { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public List<BusinessResultDtos> Business {get; set;}
     }
 }
