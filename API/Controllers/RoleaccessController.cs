@@ -16,7 +16,6 @@ namespace API.Controllers
     {
         private readonly DataContext _context;
         private IMapper _mapper;
-
         private RoleAccessCommon _roleAccessCommon;
         public RoleaccessController(DataContext context, IMapper mapper)
         {
@@ -58,6 +57,33 @@ namespace API.Controllers
         {
             try
             {
+                ClaimsPrincipal currentUser = this.User;
+                var userid = Int32.Parse(currentUser.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var roleid = Int32.Parse(currentUser.FindFirst("RoleId").Value);
+
+
+
+                var roleaccess = await this._context.Roleaccess.Where(x => x.Status == (int)StatusEnum.enable).Include(p => p.Acces).Include(P => P.Role).ToListAsync();
+
+                var result = this._mapper.Map<IEnumerable<RoleaccessResultDto>>(roleaccess);
+
+                return Ok(result);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest("An error occured. Role Access can't be added " + ex);
+            }
+        }
+
+        [HttpGet("getbyuser")]
+        public async Task<ActionResult<IEnumerable<RoleaccessResultDto>>> GetByUser()
+        {
+            try
+            {
+                ClaimsPrincipal currentUser = this.User;
+                var userid = Int32.Parse(currentUser.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var roleid = Int32.Parse(currentUser.FindFirst("RoleId").Value);
+
                 var roleaccess = await this._context.Roleaccess.Where(x => x.Status == (int)StatusEnum.enable).Include(p => p.Acces).Include(P => P.Role).ToListAsync();
 
                 var result = this._mapper.Map<IEnumerable<RoleaccessResultDto>>(roleaccess);

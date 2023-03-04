@@ -19,5 +19,10 @@ namespace API.Commons
             if(id == 0) return await this._context.Access.Where(x => (x.Name == name || x.MiddleWare == middleware) && x.Status != (int)StatusEnum.delete).AnyAsync();
             else return await this._context.Access.Where(x => (x.Name == name || x.MiddleWare == middleware) && x.Id != id && x.Status != (int)StatusEnum.delete).AnyAsync();
         }
+        public async Task<IEnumerable<AppRoleAcces>> UserHasAccess(int roleid)
+        {
+            var roleaccess = await this._context.Roleaccess.Where(x => x.RoleId == roleid && x.Status == (int)StatusEnum.enable).ToListAsync();
+            return roleaccess;
+        }
     }
 }

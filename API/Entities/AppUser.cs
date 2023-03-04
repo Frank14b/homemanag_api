@@ -29,6 +29,7 @@ namespace API.Entities
         public int Role { get; set; }
 
         public List<AppBusiness> Business {get; set;} = new();
+        public List<AppUserProperty> UserProperties {get; set;} = new();
 
         public DateTime LastLogin { get; set; }
 
@@ -41,8 +42,9 @@ namespace API.Entities
 
     public enum RoleEnum
     {
-        user = 1,
-        admin = 2
+        user = 2, // Properties Admin
+        suadmin = 1, // Super admin 
+        custom = 3 // Other User 
     }
 
     public enum StatusEnum

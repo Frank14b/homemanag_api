@@ -25,6 +25,7 @@ namespace API.Entities
         public AppBusiness Business {get; set;}
 
         public List<AppRoleAcces> RoleAcces {get; set;} = new();
+        public List<AppUserProperty> UserProperties {get; set;} = new();
 
         public DateTime CreatedAt {get; set;} = DateTime.UtcNow;
 

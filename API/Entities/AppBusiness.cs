@@ -50,6 +50,8 @@ namespace API.Entities
         
         public List<RoleResultDtos> Roles {get; set;} = new List<RoleResultDtos>();
 
+        public List<AppProperty> Properties {get; set;} = new List<AppProperty>();
+
         public int UserId {get; set;}
         public AppUser User {get; set;}
     }

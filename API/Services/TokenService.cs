@@ -23,10 +23,12 @@ namespace API.Services
         {
 
             var user_id = user.Id;
+            var role_id = user.Role;
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.NameId, user_id.ToString())
+                new Claim(JwtRegisteredClaimNames.NameId, user_id.ToString()),
+                new Claim("RoleId", role_id.ToString())
             };
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
