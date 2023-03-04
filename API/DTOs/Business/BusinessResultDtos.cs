@@ -1,4 +1,3 @@
-using API.Entities;
 using API.UsersDTOs;
 
 namespace API.DTOs.Business
@@ -6,6 +5,8 @@ namespace API.DTOs.Business
     public class BusinessResultDtos
     {
         public int Id {get; set;}
+
+        public int UserId {get; set;}
 
         public ResultAllUserDto User {get; set;}
 

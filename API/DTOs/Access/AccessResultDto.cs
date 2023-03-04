@@ -1,6 +1,3 @@
-
-using API.Entities;
-
 namespace API.AccessDTOs
 {
     public class AccessResultDto

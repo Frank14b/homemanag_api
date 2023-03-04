@@ -1,15 +1,15 @@
-
 using API.Commons;
 using API.Data;
 using API.DTOs.Roles;
 using API.Entities;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    // [Authorize]
+    [Authorize]
     public class RolesController : BaseApiController
     {
         private readonly DataContext _context;
@@ -50,21 +50,27 @@ namespace API.Controllers
             }
             catch (System.Exception ex)
             {
-                return BadRequest("Role can't be created " + ex);
+                return BadRequest("Role can't be created");
             }
         }
         
         [HttpGet("getall/{businessid}")]
-        public async Task<ActionResult<IEnumerable<AppRole>>> GetAllRoles(int businessid)
+        public async Task<ActionResult<IEnumerable<RoleResultDtos>>> GetAllRoles(int businessid)
         {
             try
             {
-                var _role = await this._context.Roles.Where(x => x.Status != (int)StatusEnum.delete && x.BusinessId == businessid).ToListAsync();
-                return _role;
+                var _role = await this._context.Roles.Where(x => x.Status != (int)StatusEnum.delete && x.BusinessId == businessid)
+                .Include(p => p.Business).ToListAsync();
+
+                if(_role == null) return NotFound("Role Not Found or Invalid Business ID");
+
+                var result = this._mapper.Map<IEnumerable<RoleResultDtos>>(_role);
+
+                return Ok(result);
             }
             catch (System.Exception)
             {
-                throw;
+                return BadRequest("An error occured or role not found");
             }
         }
 
@@ -73,13 +79,17 @@ namespace API.Controllers
         {
             try
             {
-                var _role = await this._context.Roles.Where(x => x.Id == roleid && x.Status == (int)StatusEnum.enable).FirstOrDefaultAsync();
+                var _role = await this._context.Roles.Where(x => x.Id == roleid && x.Status == (int)StatusEnum.enable)
+                .Include(p => p.Business).FirstOrDefaultAsync();
+                
+                if(_role == null) return NotFound("Please Provide a Valid role ID");
+
                 var result = this._mapper.Map<RoleResultDtos>(_role);
                 return result;
             }
             catch (System.Exception)
             {
-                return BadRequest("An error occured or access not found");
+                return BadRequest("An error occured or role not found");
             }
         }
 

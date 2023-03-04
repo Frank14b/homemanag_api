@@ -1,5 +1,4 @@
-
-using API.Entities;
+using API.DTOs.Business;
 
 namespace API.DTOs.Roles
 {
@@ -15,7 +14,9 @@ namespace API.DTOs.Roles
 
         public int Status {get; set;}
 
-        public AppBusiness Business {get; set;}
+        public int BusinessId {get; set;}
+
+        public BusinessResultDtos Business {get; set;}
 
         public DateTime CreatedAt {get; set;}
     }

@@ -49,13 +49,14 @@ namespace API.Controllers
         }
         
         [HttpGet("getall")]
-        public ActionResult<IEnumerable<AppAcces>> GetAllAccess()
+        public ActionResult<IEnumerable<AccessListResultDto>> GetAllAccess()
         {
             try
             {
                 var _access = this._context.Access.Where(x => x.Status != (int)StatusEnum.delete).ToList();
-                // var result = this._mapper.Map<AccessListResultDto>(_access);
-                return _access;
+                var result = this._mapper.Map<IEnumerable<AccessListResultDto>>(_access);
+
+                return Ok(result);
             }
             catch (System.Exception)
             {

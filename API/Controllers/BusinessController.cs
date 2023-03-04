@@ -78,10 +78,10 @@ namespace API.Controllers
         {
             try
             {
-                var _business = await this._context.Business.Where(x => x.Id == businessid && x.Status == (int)StatusEnum.enable).FirstOrDefaultAsync();
-                var result = this._mapper.Map<BusinessResultDtos>(_business);
+                var _business = await this._context.Business.Where(x => x.Id == businessid && x.Status == (int)StatusEnum.enable).Include(p => p.User).FirstOrDefaultAsync();
+                if(_business == null) return NotFound("Business not Found or invalid ID");
 
-                // if(result == null) return NotFound("Business not Found");
+                var result = this._mapper.Map<BusinessResultDtos>(_business);
 
                 return result;
             }
@@ -92,12 +92,16 @@ namespace API.Controllers
         }
 
         [HttpGet("getbyuser/{userid}")]
-        public ActionResult<IEnumerable<AppBusiness>> GetByUser(int userid)
+        public ActionResult<IEnumerable<BusinessResultDtos>> GetByUser(int userid)
         {
             try
             {
                 var _business = this._context.Business.Where(x => x.UserId == userid && x.User.Status == (int)StatusEnum.enable && x.Status == (int)StatusEnum.enable).ToList();
-                return _business;
+                if(_business == null) return NotFound("Business not Found or invalid ID");
+
+                var result = this._mapper.Map<IEnumerable<BusinessResultDtos>>(_business);
+                
+                return Ok(result);
             }
             catch (System.Exception)
             {
