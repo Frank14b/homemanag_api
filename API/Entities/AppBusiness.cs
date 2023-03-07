@@ -48,7 +48,7 @@ namespace API.Entities
 
         public DateTime UpdatedAt { get; set; }
         
-        public List<RoleResultDtos> Roles {get; set;} = new List<RoleResultDtos>();
+        public List<AppRole> Roles {get; set;} = new List<AppRole>();
 
         public List<AppProperty> Properties {get; set;} = new List<AppProperty>();
 

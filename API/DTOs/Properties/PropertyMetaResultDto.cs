@@ -1,27 +1,20 @@
-using System.ComponentModel.DataAnnotations;
-
-namespace API.Entities
+namespace API.DTOs.Properties
 {
-    public class AppPropertyMeta
+    public class PropertyMTResultDto
     {
         public int Id {get; set;}
-
-        [Required]
-        [MinLength(3)]
         public string MetaKey {get; set;}
-
         public string MetaValue {get; set;}
         public string MetaCustom {get; set;}
-
-        [Required]
-        public Boolean MetaUnique {get; set;} = false;
-        
-        [EnumDataType(typeof(StatusEnum))]
+        public Boolean MetaUnique {get; set;}
         public int Status {get; set;}
         public DateTime CreatedAt {get; set;}
         public DateTime UpdatedAt {get; set;}
-
         public int PropertyId {get; set;}
-        public AppProperty Property {get; set;}
+    }
+    public class PropertyMTDeleteDto
+    {
+        public Boolean status {get; set;}
+        public String Message {get; set;}
     }
 }

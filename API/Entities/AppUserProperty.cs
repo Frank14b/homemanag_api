@@ -1,9 +1,14 @@
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
 namespace API.Entities
 {
     public class AppUserProperty
     {
         public int Id {get; set;}
 
+        [EnumDataType(typeof(StatusEnum))]
+        [DefaultValue(StatusEnum.enable)]
         public int Status {get; set;}
         
         public int UserId {get; set;}

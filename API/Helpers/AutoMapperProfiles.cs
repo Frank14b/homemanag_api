@@ -1,5 +1,6 @@
 using API.AccessDTOs;
 using API.DTOs.Business;
+using API.DTOs.Properties;
 using API.DTOs.Roleaccess;
 using API.DTOs.Roles;
 using API.Entities;
@@ -27,6 +28,12 @@ namespace API.Helpers
             CreateMap<AppBusiness, BusinessResultDtos>();
             CreateMap<RoleaccessPostDto, AppRoleAcces>();
             CreateMap<AppRoleAcces, RoleaccessResultDto>();
+            CreateMap<AppPropertyType, PropertyTResultDto>();
+            CreateMap<PropertyTCreateDto, AppPropertyType>();
+            CreateMap<AppPropertyMeta, PropertyMTResultDto>();
+            CreateMap<PropertyMTCreateDto, AppPropertyMeta>();
+            CreateMap<AppProperty, PropertiesResultDto>();
+            CreateMap<PropertiesCreateDto, AppProperty>();
         }
     }
 }

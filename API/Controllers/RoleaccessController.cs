@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace API.Controllers
 {
     [Authorize]
+    [Route("/api/roleaccess")]
     public class RoleaccessController : BaseApiController
     {
         private readonly DataContext _context;

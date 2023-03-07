@@ -11,10 +11,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Controllers
+namespace API.Controllers.Admin
 {
-    [Authorize(Policy = "IsUser")]
-    [Route("/api/users")]
+    [Authorize(Policy = "IsAdmin")]
+    [Route("/api/admin/users")]
     public class UsersController : BaseApiController
     {
         private readonly DataContext _context;
@@ -33,7 +33,7 @@ namespace API.Controllers
         [HttpGet("getall")]
         public async Task<ActionResult<IEnumerable<ResultAllUserDto>>> GetUsers()
         {
-            var users = await this._context.Users.Where(x => x.Role != (int)RoleEnum.suadmin && x.Status != (int)StatusEnum.delete).ToListAsync();
+            var users = await this._context.Users.Where(x => (x.Status != (int)StatusEnum.delete)).Include(p => p.Business).ToListAsync();
 
             var result = this._mapper.Map<IEnumerable<ResultAllUserDto>>(users);
 
@@ -43,7 +43,7 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ResultAllUserDto>> GetUsers(int id)
         {
-            var user = await this._context.Users.Where(x => x.Id == id).FirstAsync();
+            var user = await this._context.Users.Where(x => x.Id == id).Include(p => p.Business).FirstAsync();
 
             var result = this._mapper.Map<ResultAllUserDto>(user);
 
@@ -71,7 +71,7 @@ namespace API.Controllers
 
                 var finalresult = this._mapper.Map<ResultloginDto>(result);
 
-                finalresult.Token = this._tokenService.CreateToken(result);
+                finalresult.Token = this._tokenService.CreateAdminToken(result);
 
                 return finalresult;
             }
@@ -83,7 +83,7 @@ namespace API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("register")]
+        [HttpPost("add")]
         public async Task<ActionResult<AppUser>> RegisterUsers(RegisterDto data)
         {
             if (await this._userCommon.UserNameExist(data.Username)) return BadRequest("Username already in used");
@@ -102,7 +102,7 @@ namespace API.Controllers
                 FirstName = data.Firstname,
                 LastName = data.Lastname,
                 Email = data.Email,
-                Role = ((int)RoleEnum.user),
+                Role = ((int)RoleEnum.suadmin),
                 Status = ((int)StatusEnum.enable),
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,

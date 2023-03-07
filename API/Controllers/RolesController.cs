@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace API.Controllers
 {
     [Authorize]
+    [Route("/api/roles")]
     public class RolesController : BaseApiController
     {
         private readonly DataContext _context;
@@ -48,9 +49,9 @@ namespace API.Controllers
 
                 return result;
             }
-            catch (System.Exception ex)
+            catch (System.Exception)
             {
-                return BadRequest("Role can't be created");
+                return BadRequest("An error occured. Role can't be created");
             }
         }
         

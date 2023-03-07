@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 namespace API.Controllers
 {
     [Authorize]
+    [Route("/api/access")]
     public class AccessController : BaseApiController
     {
         private readonly DataContext _context;

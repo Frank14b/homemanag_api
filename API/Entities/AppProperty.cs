@@ -20,6 +20,18 @@ namespace API.Entities
         [Required]
         [MinLength(3)]
         public string Description {get; set;}
+        public string Address {get; set;}
+
+        [Required]
+        public string Country {get; set;}
+
+        [Required]
+        public string City {get; set;}
+        public string Lng {get; set;}
+        public string Lat {get; set;}
+
+        [Required]
+        public string slug {get; set;}
         
         [EnumDataType(typeof(StatusEnum))]
         public int Status {get; set;}

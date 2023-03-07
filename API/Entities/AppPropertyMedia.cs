@@ -9,9 +9,15 @@ namespace API.Entities
         [Required]
         [MinLength(3)]
         public string Name {get; set;}
-        public string link {get; set;}
-        public string publicId {get; set;}
+        public string PreviewLink {get; set;}
+
+        [Required]
+        public string Link {get; set;}
+
+        [Required]
+        public string PublicId {get; set;}
         
+        [Required]
         [EnumDataType(typeof(MediaType))]
         public int Type {get; set;}
         

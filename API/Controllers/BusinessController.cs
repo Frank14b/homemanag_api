@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 namespace API.Controllers
 {
     [Authorize]
+    [Route("/api/business")]
     public class BusinessController: BaseApiController
     {
         private readonly DataContext _context;
