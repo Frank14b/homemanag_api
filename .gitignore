@@ -6,6 +6,12 @@
 /out-tsc
 /bazel-out
 
+/client2
+#env
+/client/src/environments.ts
+#config api
+/API/appsettings.Development.json
+
 # Node
 /node_modules
 npm-debug.log

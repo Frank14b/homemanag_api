@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace API.Entities
@@ -14,12 +13,10 @@ namespace API.Entities
         public string Name {get; set;}
         public string Description {get; set;}
         
-        [EnumDataType(typeof(StatusEnum))]
-        [DefaultValue(StatusEnum.enable)]
         public int Status {get; set;}
         public DateTime CreatedAt {get; set;}
         public DateTime UpdatedAt {get; set;}
 
-        public List<AppProperty> Properties {get; set;} = new();
+        // public List<AppProperty> Properties {get; set;} = new();
     }
 }

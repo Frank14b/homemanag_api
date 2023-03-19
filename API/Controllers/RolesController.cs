@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "IsUser")]
     [Route("/api/roles")]
     public class RolesController : BaseApiController
     {

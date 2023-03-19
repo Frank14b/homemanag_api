@@ -40,10 +40,13 @@ builder.Services.AddAuthentication().AddJwtBearer(JwtBearerDefaults.Authenticati
     };
 });
 
+string[] _Auth_Type_User = {"Admin", "User"};
+string[] _Auth_Type_Admin = {"Admin"};
+
 builder.Services.AddAuthorization(Options =>
     {
-        Options.AddPolicy("IsAdmin", policy => policy.RequireClaim("Admin"));
-        Options.AddPolicy("IsUser", policy => policy.RequireClaim("User"));
+        Options.AddPolicy("IsAdmin", policy => policy.RequireClaim("Type", _Auth_Type_Admin));
+        Options.AddPolicy("IsUser", policy => policy.RequireClaim("Type", _Auth_Type_User));
     }
 );
 

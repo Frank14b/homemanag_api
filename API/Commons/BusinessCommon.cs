@@ -21,7 +21,7 @@ namespace API.Commons
 
         public async Task<Boolean> BusinessExist(AppBusiness data, int userid)
         {
-            var result = await this._context.Business.Where(x => (x.Name == data.Name && x.UserId == userid) || x.Reference == data.Reference).AnyAsync();
+            var result = await this._context.Business.Where(x => (x.Name.ToLower() == data.Name.ToLower() && x.UserId == userid) || x.Reference.ToLower() == data.Reference.ToLower()).AnyAsync();
             return result;
         }
 

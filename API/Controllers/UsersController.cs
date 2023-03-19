@@ -115,6 +115,21 @@ namespace API.Controllers
             return user;
         }
 
+        [HttpPost("validate-token")]
+        public async Task<ActionResult<ResultAllUserDto>> ValidateToken()
+        {
+            ClaimsPrincipal currentUser = this.User;
+            var id = Int32.Parse(currentUser.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            if (!await this._userCommon.UserIdExist(id)) return BadRequest("User not found");
+
+            var user = await this._context.Users.Where(x => x.Id == id).FirstAsync();
+
+            var result = this._mapper.Map<ResultAllUserDto>(user);
+
+            return Ok(result);
+        }
+
         [HttpDelete("delete")]
         public async Task<ActionResult<ResultDeleteUserDto>> DeleteUser(DeleteUserDto data)
         {

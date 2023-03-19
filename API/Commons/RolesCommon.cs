@@ -16,12 +16,12 @@ namespace API.Commons
         {
             if (id == 0)
             {
-                var result = await this._context.Roles.Where(x => x.Title == title && x.BusinessId == businessid).AnyAsync();
+                var result = await this._context.Roles.Where(x => x.Title.ToLower() == title.ToLower() && x.BusinessId == businessid).AnyAsync();
                 return result;
             }
             else
             {
-                var result = await this._context.Roles.Where(x => x.Title == title && x.BusinessId == businessid && x.Id != id).AnyAsync();
+                var result = await this._context.Roles.Where(x => x.Title.ToLower() == title.ToLower() && x.BusinessId == businessid && x.Id != id).AnyAsync();
                 return result;
             }
         }

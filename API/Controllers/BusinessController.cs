@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "IsUser")]
     [Route("/api/business")]
     public class BusinessController: BaseApiController
     {

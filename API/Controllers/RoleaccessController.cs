@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "IsUser")]
     [Route("/api/roleaccess")]
     public class RoleaccessController : BaseApiController
     {
@@ -26,7 +26,7 @@ namespace API.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<ActionResult<AppRoleAcces>> AddRoleAccess(RoleaccessPostDto data)
+        public async Task<ActionResult<RoleaccessResultDto>> AddRoleAccess(RoleaccessPostDto data)
         {
             try
             {
@@ -39,11 +39,11 @@ namespace API.Controllers
                 _data.Status = (int)StatusEnum.enable;
                 _data.CreatedAt = DateTime.Now;
 
-                var roleaccess = this._context.Roleaccess.Add(_data);
+                this._context.Roleaccess.Add(_data);
 
                 await this._context.SaveChangesAsync();
 
-                var result = roleaccess;
+                var result = this._mapper.Map<RoleaccessResultDto>(_data);
 
                 return Ok(result);
             }

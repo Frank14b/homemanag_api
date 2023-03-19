@@ -15,7 +15,13 @@ namespace API.Commons
 
         public async Task<Boolean> TypeExist(string name, int subTypeId)
         {
-            var _type = await this._context.PropertyTypes.Where(x => (x.Name == name && x.SubTypeId == subTypeId && x.Status != (int)StatusEnum.delete)).AnyAsync();
+            var _type = await this._context.PropertyTypes.Where(x => (x.Name.ToLower() == name.ToLower() && x.SubTypeId == subTypeId && x.Status != (int)StatusEnum.delete)).AnyAsync();
+            return _type;
+        }
+
+        public async Task<Boolean> PropertyExist(string reference)
+        {
+            var _type = await this._context.Properties.Where(x => (x.Reference == reference && x.Status != (int)StatusEnum.delete)).AnyAsync();
             return _type;
         }
     }

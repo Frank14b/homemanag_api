@@ -30,7 +30,7 @@ namespace API.Services
             {
                 new Claim(JwtRegisteredClaimNames.NameId, user_id.ToString()),
                 new Claim("RoleId", role_id.ToString()),
-                new Claim("User", "true")
+                new Claim("Type", "User")
             };
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
@@ -58,7 +58,7 @@ namespace API.Services
             {
                 new Claim(JwtRegisteredClaimNames.NameId, user_id.ToString()),
                 new Claim("RoleId", role_id.ToString()),
-                new Claim("Admin", "true")
+                new Claim("Type", "Admin")
             };
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);

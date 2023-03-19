@@ -10,7 +10,7 @@ namespace API.Controllers
     {
         public BaseApiController()
         {
-
+            
         }
     }
 }

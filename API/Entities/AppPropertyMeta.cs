@@ -16,7 +16,6 @@ namespace API.Entities
         [Required]
         public Boolean MetaUnique {get; set;} = false;
         
-        [EnumDataType(typeof(StatusEnum))]
         public int Status {get; set;}
         public DateTime CreatedAt {get; set;}
         public DateTime UpdatedAt {get; set;}
