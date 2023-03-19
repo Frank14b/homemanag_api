@@ -11,7 +11,12 @@ import { mockApiServices } from 'app/mock-api';
 import { LayoutModule } from 'app/layout/layout.module';
 import { AppComponent } from 'app/app.component';
 import { appRoutes } from 'app/app.routing';
-// import { DashboardComponent } from './modules/admin/dashboard/dashboard.component';
+import { BusinessComponent } from './modules/admin/business/business.component';
+import { UsersComponent } from './modules/admin/users/users.component';
+import { PropertiesComponent } from './modules/admin/properties/properties.component';
+import { UsersRolesComponent } from './modules/admin/users-roles/users-roles.component';
+import { RolesAccessComponent } from './modules/admin/roles-access/roles-access.component';
+import { UserProfileComponent } from './modules/admin/user-profile/user-profile.component';
 
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
@@ -21,6 +26,12 @@ const routerConfig: ExtraOptions = {
 @NgModule({
     declarations: [
         AppComponent,
+        BusinessComponent,
+        UsersComponent,
+        PropertiesComponent,
+        UsersRolesComponent,
+        RolesAccessComponent,
+        UserProfileComponent,
         // DashboardComponent
     ],
     imports     : [

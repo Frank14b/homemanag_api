@@ -17,7 +17,7 @@ export const appRoutes: Route[] = [
     // After the user signs in, the sign-in page will redirect the user to the 'signed-in-redirect'
     // path. Below is another redirection for that path to redirect the user to the desired
     // location. This is a small convenience to keep all main routes together here on this file.
-    {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'example'},
+    {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'dashboard'},
 
     // Auth routes for guests
     {
@@ -61,7 +61,7 @@ export const appRoutes: Route[] = [
             {path: 'home', loadChildren: () => import('app/modules/landing/home/home.module').then(m => m.LandingHomeModule)},
         ]
     },
-
+    
     // Admin routes
     {
         path: '',
@@ -72,6 +72,12 @@ export const appRoutes: Route[] = [
         },
         children: [
             {path: 'dashboard', loadChildren: () => import('app/modules/admin/dashboard/dashboard.module').then(m => m.DashboardModule)},
+            {path: 'business', loadChildren: () => import('app/modules/admin/business/business.module'). then(m => m.BusinessModule)},
+            {path: 'properties', loadChildren: () => import('app/modules/admin/properties/properties.module'). then(m => m.PropertiesModule)},  
+            {path: 'users', loadChildren: () => import('app/modules/admin/users/users.module'). then(m => m.UsersModule)},
+            {path: 'roles-access', loadChildren: () => import('app/modules/admin/roles-access/roles-access.module'). then(m => m.RolesAccessModule)},
+            {path: 'users-roles', loadChildren: () => import('app/modules/admin/users-roles/users-roles.module'). then(m => m.UsersRolesModule)},
+            {path: 'user-profile', loadChildren: () => import('app/modules/admin/user-profile/user-profile.module'). then(m => m.UserProfileModule)},
         ]
     }
 ];
