@@ -15,11 +15,11 @@
             </div>
         </div>
         <div class="flex flex-col items-center mt-2">
-            <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-blue-500">0</div>
+            <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-blue-500">{{ dataTotal.business.active + dataTotal.business.inactive }}</div>
             <div class="text-lg font-medium text-blue-600 dark:text-blue-500">Business</div>
             <div class="flex items-baseline justify-center w-full mt-5 text-secondary">
                 <div class="text-md font-medium truncate">Available:</div>
-                <div class="ml-1.5 text-lg font-semibold">0</div>
+                <div class="ml-1.5 text-lg font-semibold">{{ dataTotal.business.active + dataTotal.business.inactive }}</div>
             </div>
         </div>
     </div>
@@ -39,11 +39,11 @@
             </div>
         </div>
         <div class="flex flex-col items-center mt-2">
-            <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-red-500">0</div>
+            <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-red-500">{{ dataTotal.properties.active + dataTotal.properties.inactive }}</div>
             <div class="text-lg font-medium text-red-600 dark:text-red-500">Properties</div>
             <div class="flex items-baseline justify-center w-full mt-5 text-secondary">
                 <div class="text-md font-medium truncate">Available</div>
-                <div class="ml-1.5 text-lg font-semibold">0</div>
+                <div class="ml-1.5 text-lg font-semibold">{{ dataTotal.properties.active + dataTotal.properties.inactive }}</div>
             </div>
         </div>
     </div>
@@ -63,11 +63,11 @@
             </div>
         </div>
         <div class="flex flex-col items-center mt-2">
-            <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-amber-500">1</div>
+            <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-amber-500">{{ dataTotal.users.employees }}</div>
             <div class="text-lg font-medium text-amber-600 dark:text-amber-500">Users</div>
             <div class="flex items-baseline justify-center w-full mt-5 text-secondary">
                 <div class="text-md font-medium truncate">Employees:</div>
-                <div class="ml-1.5 text-lg font-semibold">1</div>
+                <div class="ml-1.5 text-lg font-semibold">{{ dataTotal.users.all }}</div>
             </div>
         </div>
     </div>
