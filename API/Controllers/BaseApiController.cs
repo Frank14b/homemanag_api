@@ -8,9 +8,9 @@ namespace API.Controllers
 
     public class BaseApiController : ControllerBase
     {
-        public BaseApiController()
-        {
-            
+        public BaseApiController() { 
+
+            // this._context = context;
         }
     }
 }

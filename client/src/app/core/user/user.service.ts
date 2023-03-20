@@ -7,6 +7,7 @@ import { environment } from 'environments';
 @Injectable({
     providedIn: 'root'
 })
+
 export class UserService
 {
     private _user: ReplaySubject<User> = new ReplaySubject<User>(1);

@@ -53,4 +53,10 @@ namespace API.UsersDTOs
         public DateTime UpdatedAt { get; set; }
         public List<BusinessResultDtos> Business {get; set;}
     }
+
+    public class TotalUsersDto
+    {
+        public int employees {get; set;}
+        public int all {get; set;}
+    }
 }

@@ -6,14 +6,7 @@ export interface User {
     status: number,
     email: string,
     lastLogin: string,
-    dateOfBirth: {
-        year: number,
-        month: number,
-        day: number,
-        dayOfWeek: number,
-        dayOfYear: number,
-        dayNumber: number
-    },
+    dateOfBirth: string,
     createdAt: string,
     updatedAt: string,
     avatar: string,

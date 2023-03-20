@@ -4,6 +4,8 @@ import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { map } from 'lodash';
 import { Subject, takeUntil } from 'rxjs';
+import { TotalData } from './dashbaord.types';
+import { DashboardService } from './dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,6 +15,7 @@ import { Subject, takeUntil } from 'rxjs';
 export class DashboardComponent
   {
     public user:User;
+    public totalData:TotalData;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -20,6 +23,7 @@ export class DashboardComponent
      */
     constructor(
         private _userSservice: UserService,
+        private _dashbaordService: DashboardService,
         private _router: Router
     )
     {
@@ -40,6 +44,12 @@ export class DashboardComponent
       .subscribe((user: User) => {
           this.user = user;
       });
+
+      this._dashbaordService.totalData$
+      .pipe((takeUntil(this._unsubscribeAll)))
+      .subscribe((total: TotalData) => {
+        this.totalData = total
+      })
     }
 
     /**

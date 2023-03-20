@@ -1,3 +1,4 @@
+using System.Collections;
 using API.Data;
 using API.DTOs.Business;
 using API.Entities;
@@ -29,6 +30,33 @@ namespace API.Commons
         {
             var result = this._context.Business.Where(x => x.Id == id).FirstOrDefault();
             return result;
+        }
+
+        public TotalBusinessDto GetTotalBusiness(int userid = 0)
+        {
+            var resultActive = this._context.Business.Where(x => x.Status == (int)StatusEnum.enable).ToList();
+
+            var resultInactive = this._context.Business.Where(x => x.Status == (int)StatusEnum.disable).ToList();
+            
+            var result = new TotalBusinessDto{
+                active = resultActive.Count,
+                inactive = resultInactive.Count
+            };
+
+            return result;
+        }
+
+        public ArrayList GetUserBusiness(int userid)
+        {
+            var result = this._context.Business.Where(x => x.UserId == userid && x.Status == (int)StatusEnum.enable).ToList();
+
+            ArrayList _data = new ArrayList();
+            for (int i = result.Count - 1; i >= 0 ; i--)
+            {
+                _data.Add(result[i].Id); 
+            }
+
+            return _data;
         }
     }
 }

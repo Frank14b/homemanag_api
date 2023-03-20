@@ -44,4 +44,10 @@ namespace API.DTOs.Business
         public Boolean Status { get; set; }
         public string Message { get; set; }
     }
+
+    public class TotalBusinessDto
+    {
+        public int active {get; set;}
+        public int inactive {get; set;}
+    }
 }

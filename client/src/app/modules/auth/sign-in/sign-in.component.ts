@@ -43,6 +43,7 @@ export class AuthSignInComponent implements OnInit
      */
     ngOnInit(): void
     {
+        console.log("frank")
         // Create the form
         this.signInForm = this._formBuilder.group({
             login     : ['user', [Validators.required]],

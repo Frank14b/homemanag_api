@@ -17,6 +17,8 @@ namespace API.Entities
         public int PropertyId {get; set;}
         public AppProperty Property {get; set;}
 
+        public Boolean IsEmployee {get; set;} = false;
+
         public int RoleId {get; set;}
         public AppRole Role {get; set;}
 

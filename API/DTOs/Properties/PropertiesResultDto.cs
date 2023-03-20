@@ -25,4 +25,10 @@ namespace API.DTOs.Properties
         public Boolean status {get; set;}
         public String Message {get; set;}
     }
+
+    public class TotalPropertiesDto
+    {
+        public int active {get; set;}
+        public int inactive {get; set;}
+    }
 }
