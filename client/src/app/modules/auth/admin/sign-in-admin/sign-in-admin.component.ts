@@ -5,15 +5,18 @@ import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
 
+
 @Component({
-    selector     : 'auth-sign-in',
-    templateUrl  : './sign-in.component.html',
-    encapsulation: ViewEncapsulation.None,
-    animations   : fuseAnimations
+  selector: 'app-sign-in-admin',
+  templateUrl: './sign-in-admin.component.html',
+  styleUrls: ['./sign-in-admin.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  animations   : fuseAnimations
 })
-export class AuthSignInComponent implements OnInit
+
+export class SignInAdminComponent
 {
-    @ViewChild('signInNgForm') signInNgForm: NgForm;
+@ViewChild('signInNgForm') signInNgForm: NgForm;
 
     alert: { type: FuseAlertType; message: string } = {
         type   : 'success',
@@ -45,7 +48,7 @@ export class AuthSignInComponent implements OnInit
     {
         // Create the form
         this.signInForm = this._formBuilder.group({
-            login     : ['user', [Validators.required]],
+            login     : ['admin', [Validators.required]],
             password  : ['admin', Validators.required],
             rememberMe: ['']
         });
@@ -106,4 +109,4 @@ export class AuthSignInComponent implements OnInit
                 }
             );
     }
-}
+  }

@@ -62,10 +62,10 @@ namespace API.Commons
             var allUsers = 0;
 
             if(userbusiness.Count > 0){
-                var resultEmployees = this._context.Users.Where(x => x.Status == (int)StatusEnum.enable && x.UserProperties.All(up => userbusiness.Contains(up.Property.BusinessId) && up.IsEmployee)).ToList();
+                var resultEmployees = this._context.Users.Where(x => x.Status == (int)StatusEnum.enable && x.Role != (int)RoleEnum.suadmin && x.UserProperties.All(up => userbusiness.Contains(up.Property.BusinessId) && up.IsEmployee)).ToList();
                 employees = resultEmployees.Count;
 
-                var resultAllUsers = this._context.Users.Where(x => x.Status == (int)StatusEnum.enable && x.UserProperties.All(up => userbusiness.Contains(up.Property.BusinessId))).ToList();
+                var resultAllUsers = this._context.Users.Where(x => x.Status == (int)StatusEnum.enable && x.Role != (int)RoleEnum.suadmin && x.UserProperties.All(up => userbusiness.Contains(up.Property.BusinessId))).ToList();
                 allUsers = resultAllUsers.Count;
             }
 
@@ -77,10 +77,10 @@ namespace API.Commons
             }
 
             if(_propertyList.Count > 0) {
-                var resultEmployees2 = this._context.Users.Where(x => x.Status == (int)StatusEnum.enable && x.UserProperties.All(up => _propertyList.Contains(up.PropertyId) && up.IsEmployee)).ToList();
+                var resultEmployees2 = this._context.Users.Where(x => x.Status == (int)StatusEnum.enable  && x.Role != (int)RoleEnum.suadmin && x.UserProperties.All(up => _propertyList.Contains(up.PropertyId) && up.IsEmployee)).ToList();
                 employees = employees + resultEmployees2.Count;
 
-                var resultAllUsers2 = this._context.Users.Where(x => x.Status == (int)StatusEnum.enable && x.UserProperties.All(up => _propertyList.Contains(up.PropertyId))).ToList();
+                var resultAllUsers2 = this._context.Users.Where(x => x.Status == (int)StatusEnum.enable  && x.Role != (int)RoleEnum.suadmin && x.UserProperties.All(up => _propertyList.Contains(up.PropertyId))).ToList();
                 allUsers = allUsers + resultAllUsers2.Count;
             }
             

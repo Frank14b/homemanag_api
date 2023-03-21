@@ -56,7 +56,7 @@ namespace API.Controllers
         {
             try
             {
-                var result = await this._context.Users.SingleOrDefaultAsync(x => (x.UserName == data.Login) || (x.Email == data.Login));
+                var result = await this._context.Users.SingleOrDefaultAsync(x => ((x.UserName == data.Login) || (x.Email == data.Login)) && x.Role != (int)RoleEnum.suadmin && x.Status != (int)StatusEnum.delete);
 
                 if (result == null) Unauthorized("Invalid Login / Password, User not found");
 
@@ -70,6 +70,8 @@ namespace API.Controllers
                 }
 
                 var finalresult = this._mapper.Map<ResultloginDto>(result);
+
+                if(result.Status == (int)StatusEnum.disable) return Ok("Your account is disabled. Please Contact the admin");
 
                 finalresult.Token = this._tokenService.CreateToken(result);
 

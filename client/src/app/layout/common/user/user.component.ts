@@ -54,6 +54,16 @@ export class UserComponent implements OnInit, OnDestroy
             });
     }
 
+    goToProfile(): void
+    {
+        this._router.navigate(["/user-profile"]);
+    }
+
+    goToSettings() : void
+    {
+        this._router.navigate(["/settings"]);
+    }
+
     /**
      * On destroy
      */
