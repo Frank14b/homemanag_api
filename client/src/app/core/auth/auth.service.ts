@@ -203,4 +203,18 @@ export class AuthService {
         // If the access token exists and it didn't expire, sign in using it
         return this.signInUsingToken();
     }
+
+    /**
+     *  Check the auth role
+     */
+    checkAdmin(): Observable<Boolean>
+    {
+        if(this._authenticated) {
+            if(AuthUtils._getTokenRole(this.accessToken)) {
+                return of(true)
+            } 
+        }
+
+        return of(false);
+    }
 }

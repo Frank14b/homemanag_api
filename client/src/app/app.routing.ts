@@ -3,6 +3,7 @@ import { AuthGuard } from 'app/core/auth/guards/auth.guard';
 import { NoAuthGuard } from 'app/core/auth/guards/noAuth.guard';
 import { LayoutComponent } from 'app/layout/layout.component';
 import { InitialDataResolver } from 'app/app.resolvers';
+import { AuthAdminGuard } from './core/auth/guards/auth-admin.guard';
 
 // @formatter:off
 /* eslint-disable max-len */
@@ -94,6 +95,19 @@ export const appRoutes: Route[] = [
             {path: 'roles-access', loadChildren: () => import('app/modules/admin/roles-access/roles-access.module'). then(m => m.RolesAccessModule)},
             {path: 'users-roles', loadChildren: () => import('app/modules/admin/users-roles/users-roles.module'). then(m => m.UsersRolesModule)},
             {path: 'user-profile', loadChildren: () => import('app/modules/admin/user-profile/user-profile.module'). then(m => m.UserProfileModule)},
+        ]
+    },
+
+    // Su Admin routes
+    {
+        path: '',
+        canMatch: [AuthAdminGuard],
+        component: LayoutComponent,
+        resolve: {
+            initialData: InitialDataResolver,
+        },
+        children: [
+            {path: 'properties/types', loadChildren: () => import('app/modules/admin/property-types/property-types.module'). then(m => m.PropertyTypesModule)},
         ]
     }
 ];

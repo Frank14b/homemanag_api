@@ -201,4 +201,30 @@ export class AuthUtils
 
         return date;
     }
+
+     /**
+     * Get token user role
+     *
+     * @param token
+     * @private
+     */
+     public static _getTokenRole(token: string): boolean | null
+     {
+         // Get the decoded token
+         const decodedToken = this._decodeToken(token);
+ 
+         // Return if the decodedToken doesn't have an 'exp' field
+         if ( !decodedToken.hasOwnProperty('RoleId') )
+         {
+             return false;
+         }
+
+         if(decodedToken.RoleId) {
+            if(decodedToken.RoleId == "1") {
+                return true
+            }
+         }
+
+         return false;
+     }
 }
