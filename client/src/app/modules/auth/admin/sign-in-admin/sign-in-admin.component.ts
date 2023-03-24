@@ -76,7 +76,7 @@ export class SignInAdminComponent
         this.showAlert = false;
 
         // Sign in
-        this._authService.signIn(this.signInForm.value)
+        this._authService.adminSignIn(this.signInForm.value)
             .subscribe(
                 () => {
 

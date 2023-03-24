@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, ReplaySubject, tap } from 'rxjs';
+import { Observable, ReplaySubject, switchMap, tap } from 'rxjs';
 import { Navigation } from 'app/core/navigation/navigation.types';
+import { AuthService } from '../auth/auth.service';
+import { map } from 'lodash';
 
 @Injectable({
     providedIn: 'root'
@@ -13,7 +15,7 @@ export class NavigationService
     /**
      * Constructor
      */
-    constructor(private _httpClient: HttpClient)
+    constructor(private _httpClient: HttpClient, private _authService: AuthService)
     {
     }
 
@@ -38,10 +40,21 @@ export class NavigationService
      */
     get(): Observable<Navigation>
     {
-        return this._httpClient.get<Navigation>('api/common/navigation').pipe(
-            tap((navigation) => {
-                this._navigation.next(navigation);
-            })
-        );
+        var userrole = this._authService.userRole
+        
+        if(userrole == "admin") {
+            return this._httpClient.get<Navigation>('api/common/admin/navigation').pipe(
+                tap((navigation) => {
+                    this._navigation.next(navigation);
+                })
+            );
+        }else{
+            return this._httpClient.get<Navigation>('api/common/navigation').pipe(
+                tap((navigation) => {
+                    this._navigation.next(navigation);
+                })
+            );
+        }
+        
     }
 }

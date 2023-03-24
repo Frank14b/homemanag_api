@@ -33,6 +33,13 @@ export class AuthService {
         return localStorage.getItem('accessToken') ?? '';
     }
 
+    get userRole(): string {
+        if(AuthUtils._getTokenRole(this.accessToken)) {
+            return "admin"
+        }
+        return "user"
+    }
+
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
