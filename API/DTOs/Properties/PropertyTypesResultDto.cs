@@ -1,6 +1,6 @@
 namespace API.DTOs.Properties
 {
-    public class PropertyTResultDto
+    public class PropertyTResultListDto
     {
         public int Id {get; set;}
         public int SubTypeId {get; set;}
@@ -12,7 +12,15 @@ namespace API.DTOs.Properties
     }
     public class PropertyTDeleteDto
     {
-        public Boolean status {get; set;}
+        public Boolean Status {get; set;}
         public String Message {get; set;}
+    }
+
+    public class PropertyTResultDto
+    {
+        public IEnumerable<PropertyTResultListDto> Data {get; set;}
+        public int Total {get; set;}
+        public int Skip {get; set;}
+        public int Limit {get; set;}
     }
 }

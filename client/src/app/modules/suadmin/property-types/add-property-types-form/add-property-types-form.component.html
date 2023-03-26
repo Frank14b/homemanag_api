@@ -1,0 +1,45 @@
+<h2 mat-dialog-title>Create new type</h2>
+<form #addTypeForm="ngForm" [formGroup]="typeDataForm">
+
+    <mat-dialog-content class="mat-typography mt-6">
+        <div class="w-full">
+
+            <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Name</mat-label>
+                <input matInput id="name" [formControlName]="'name'">
+                <mat-error *ngIf="typeDataForm.get('name').hasError('required')">
+                    Name is required
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Sub Type</mat-label>
+                <mat-select *ngIf="defaultSubtypeid != null" [(value)]="defaultSubtypeid" id="subTypeId" [formControlName]="'subTypeId'">
+                    <mat-option value="0"></mat-option>
+                    <mat-option *ngFor="let ptype of currentList" value="{{ptype.id}}">{{ ptype.name }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Description</mat-label>
+                <textarea matInput id="description" [formControlName]="'description'"></textarea>
+            </mat-form-field>
+        </div>
+
+        <!-- Loader -->
+        <div class="inset-x-0 bottom-0" *ngIf="isLoading">
+            Saving...
+            <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+        </div>
+
+        <!-- Alert -->
+        <fuse-alert class="mt-2" *ngIf="showAlert" [appearance]="'border'" [showIcon]="false" [type]="alert.type"
+            [@shake]="alert.type === 'error'">
+            {{alert.message}}
+        </fuse-alert>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Cancel</button>
+        <button mat-button *ngIf="!isUpdate" (click)="createType()" cdkFocusInitial [disabled]="isLoading">Save New</button>
+        <button mat-button *ngIf="isUpdate" (click)="updateType()" cdkFocusInitial [disabled]="isLoading">Save Update</button>
+    </mat-dialog-actions>
+</form>

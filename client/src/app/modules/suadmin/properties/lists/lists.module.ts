@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-// import { PropertyTypesComponent } from './property-types.component';
+import { ListsComponent } from './lists.component';
+
+
 
 @NgModule({
   declarations: [
-    // PropertyTypesComponent
+    ListsComponent
   ],
   imports: [
     CommonModule
   ]
 })
-export class PropertyTypesModule { }
+export class ListsModule { }

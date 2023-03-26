@@ -107,7 +107,10 @@ export const appRoutes: Route[] = [
             initialData: InitialDataResolver,
         },
         children: [
-            {path: 'properties/types', loadChildren: () => import('app/modules/admin/property-types/property-types.module'). then(m => m.PropertyTypesModule)},
+            {path: 'property/types', loadChildren: () => import('app/modules/suadmin/property-types/property-types.module'). then(m => m.PropertyTypesModule)},
+            {path: 'all-properties', loadChildren: () => import('app/modules/suadmin/properties/lists/lists.module'). then(m => m.ListsModule)},
+            {path: 'roles/access', loadChildren: () => import('app/modules/suadmin/users/access/access.module'). then(m => m.AccessModule)},
+            {path: 'all-users', loadChildren: () => import('app/modules/suadmin/users/users-list/users-list.module'). then(m => m.UsersListModule)},
         ]
     }
 ];

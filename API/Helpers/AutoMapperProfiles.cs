@@ -28,11 +28,12 @@ namespace API.Helpers
             CreateMap<AppBusiness, BusinessResultDtos>();
             CreateMap<RoleaccessPostDto, AppRoleAcces>();
             CreateMap<AppRoleAcces, RoleaccessResultDto>();
-            CreateMap<AppPropertyType, PropertyTResultDto>();
+            CreateMap<AppPropertyType, PropertyTResultListDto>();
             CreateMap<PropertyTCreateDto, AppPropertyType>();
             CreateMap<AppPropertyMeta, PropertyMTResultDto>();
             CreateMap<PropertyMTCreateDto, AppPropertyMeta>();
             CreateMap<AppProperty, PropertiesResultDto>();
+            CreateMap<PropertyTUpdateDto, AppPropertyType>();
             CreateMap<PropertiesCreateDto, AppProperty>();
         }
     }

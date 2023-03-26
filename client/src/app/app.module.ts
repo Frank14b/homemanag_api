@@ -35,7 +35,7 @@ const routerConfig: ExtraOptions = {
         CoreModule,
 
         // Layout module of your application
-        LayoutModule
+        LayoutModule,
     ],
     bootstrap   : [
         AppComponent
