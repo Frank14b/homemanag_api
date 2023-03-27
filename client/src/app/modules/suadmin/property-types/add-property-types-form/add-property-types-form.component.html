@@ -1,4 +1,6 @@
-<h2 mat-dialog-title>Create new type</h2>
+<h2 mat-dialog-title *ngIf="!isUpdate">Create new type</h2>
+<h2 mat-dialog-title *ngIf="isUpdate">Update selected type</h2>
+
 <form #addTypeForm="ngForm" [formGroup]="typeDataForm">
 
     <mat-dialog-content class="mat-typography mt-6">
@@ -13,9 +15,9 @@
             </mat-form-field>
             <mat-form-field appearance="fill" class="w-full">
                 <mat-label>Sub Type</mat-label>
-                <mat-select *ngIf="defaultSubtypeid != null" [(value)]="defaultSubtypeid" id="subTypeId" [formControlName]="'subTypeId'">
+                <mat-select id="subTypeId" [formControlName]="'subTypeId'">
                     <mat-option value="0"></mat-option>
-                    <mat-option *ngFor="let ptype of currentList" value="{{ptype.id}}">{{ ptype.name }}</mat-option>
+                    <mat-option *ngFor="let ptype of currentList" [value]="ptype.id">{{ ptype.name }}</mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field appearance="fill" class="w-full">

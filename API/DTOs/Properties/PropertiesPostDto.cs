@@ -8,8 +8,6 @@ namespace API.DTOs.Properties
         [MinLength(3)]
         public string Name {get; set;}
         [Required]
-        public string Reference {get; set;}
-        [Required]
         [MinLength(3)]
         public string ShortDesc {get; set;}
         [Required]
@@ -29,9 +27,9 @@ namespace API.DTOs.Properties
         [Required]
         public string Lat {get; set;}
         [Required]
-        public string slug {get; set;}
         public int BusinessId {get; set;}
         public int UserId {get; set;}
+        [Required]
         public int PropertyTypeId {get; set;}
     }
 
@@ -44,8 +42,6 @@ namespace API.DTOs.Properties
         [MinLength(3)]
         public string Name {get; set;}
         [Required]
-        public string Reference {get; set;}
-        [Required]
         [MinLength(3)]
         public string ShortDesc {get; set;}
         [Required]
@@ -65,9 +61,6 @@ namespace API.DTOs.Properties
         [Required]
         public string Lat {get; set;}
         [Required]
-        public string slug {get; set;}
-        public int BusinessId {get; set;}
-        public int UserId {get; set;}
         public int PropertyTypeId {get; set;}
     }
 }

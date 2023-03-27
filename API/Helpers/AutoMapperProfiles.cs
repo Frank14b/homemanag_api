@@ -32,7 +32,7 @@ namespace API.Helpers
             CreateMap<PropertyTCreateDto, AppPropertyType>();
             CreateMap<AppPropertyMeta, PropertyMTResultDto>();
             CreateMap<PropertyMTCreateDto, AppPropertyMeta>();
-            CreateMap<AppProperty, PropertiesResultDto>();
+            CreateMap<AppProperty, PropertiesResultListDto>();
             CreateMap<PropertyTUpdateDto, AppPropertyType>();
             CreateMap<PropertiesCreateDto, AppProperty>();
         }

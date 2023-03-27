@@ -17,7 +17,6 @@ export class AddPropertyTypesFormComponent {
   typeDataForm: UntypedFormGroup;
   showAlert: boolean = false;
   currentList: ResultListDto;
-  defaultSubtypeid: any = null;
   isUpdate = false
 
   alert: { type: FuseAlertType; message: string } = {
@@ -47,14 +46,11 @@ export class AddPropertyTypesFormComponent {
     this.currentList = this.data.currentList
 
     if (this.data.defaultType != null) {
-      this.defaultSubtypeid = this.data.defaultType.subTypeId
       this.typeDataForm.get("id").setValue(this.data.defaultType.id)
       this.typeDataForm.get("name").setValue(this.data.defaultType.name)
       this.typeDataForm.get("description").setValue(this.data.defaultType.description)
-      this.typeDataForm.get("subTypeId").setValue(this.data.defaultType.subtypeid)
+      this.typeDataForm.get("subTypeId").setValue(this.data.defaultType.subTypeId)
       this.isUpdate = true
-    }else{
-      this.defaultSubtypeid = 0
     }
   }
 

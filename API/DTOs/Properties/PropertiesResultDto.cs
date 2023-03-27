@@ -1,6 +1,6 @@
 namespace API.DTOs.Properties
 {
-    public class PropertiesResultDto
+    public class PropertiesResultListDto
     {
         public int Id {get; set;}
         public string Name {get; set;}
@@ -20,6 +20,16 @@ namespace API.DTOs.Properties
         public DateTime CreatedAt {get; set;}
         public DateTime UpdatedAt {get; set;}
     }
+
+    public class PropertiesResultDto 
+    {
+        public IEnumerable<PropertiesResultListDto> Data {get; set;}
+        public int Total {get; set;}
+        public int Skip {get; set;}
+        public int Limit {get; set;}
+        public string Sort {get; set;}
+    }
+
     public class PropertiesDeleteDto
     {
         public Boolean status {get; set;}

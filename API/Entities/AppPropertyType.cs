@@ -16,6 +16,7 @@ namespace API.Entities
         public int Status {get; set;}
         public DateTime CreatedAt {get; set;}
         public DateTime UpdatedAt {get; set;}
+        // public AppPropertyType SubTypes {get; set;} = new();
 
         // public List<AppProperty> Properties {get; set;} = new();
     }

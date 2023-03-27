@@ -9,6 +9,7 @@ namespace API.DTOs.Properties
         public int Status {get; set;}
         public DateTime CreatedAt {get; set;}
         public DateTime UpdatedAt {get; set;}
+        public PropertyTResultListDto SubTypes {get; set;}
     }
     public class PropertyTDeleteDto
     {
