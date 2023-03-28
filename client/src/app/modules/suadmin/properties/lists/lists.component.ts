@@ -36,7 +36,7 @@ export class ListsComponent {
   ) { }
 
   ngOnInit(): void {
-
+    navigator.geolocation.getCurrentPosition((position: any) => {})
   }
 
   ngAfterViewInit(): void {

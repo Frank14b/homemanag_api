@@ -20,6 +20,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { FuseAlertModule } from '@fuse/components/alert';
 import { MatTableModule } from '@angular/material/table';
 import { SharedModule } from 'app/shared/shared.module';
+import { GoogleMapsModule } from '@angular/google-maps';
+import { CardGmapsComponent } from 'app/modules/card-gmaps/card-gmaps.component';
 
 const exampleRoutes: Route[] = [
   {
@@ -31,7 +33,8 @@ const exampleRoutes: Route[] = [
 @NgModule({
   declarations: [
     AddFormComponent,
-    ListsComponent
+    ListsComponent,
+    CardGmapsComponent
   ],
   imports: [
     RouterModule.forChild(exampleRoutes),
@@ -52,6 +55,7 @@ const exampleRoutes: Route[] = [
     MatDialogModule,
     FuseAlertModule,
     MatTableModule,
+    GoogleMapsModule,
     SharedModule
   ]
 })

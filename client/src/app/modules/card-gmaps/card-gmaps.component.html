@@ -1,0 +1,19 @@
+<mat-form-field appearance="fill" class="w-full">
+    <mat-label>Property Location</mat-label>
+    <input matInput id="location" placeholder="Type the location here">
+    <!-- <mat-error *ngIf="propertyDataForm.get('location').hasError('required')">
+        Property location is required
+    </mat-error> -->
+</mat-form-field>
+
+<google-map class="w-full" height="300px" width="100%" [center]="center" [zoom]="zoom">
+    <map-marker
+    #markerElem
+    *ngFor="let marker of markers"
+    [position]="marker.position"
+    [label]="marker.label"
+    [title]="marker.title"
+    [options]="marker.options"
+  >
+  </map-marker>
+</google-map>
