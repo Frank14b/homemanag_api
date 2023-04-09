@@ -60,3 +60,13 @@ export type UpdatePropertyDto = {
     businessId: number,
     propertyTypeId: number
 }
+
+export type DataLocation = {
+    name: string,
+    lat: number,
+    lng: number,
+    url: string,
+    city: string,
+    country: string,
+    countryCode: string
+}

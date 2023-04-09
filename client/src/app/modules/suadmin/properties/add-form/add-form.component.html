@@ -85,8 +85,7 @@
 
             <div class="w-full px-0" *ngIf="stepper == 4">
                 
-                
-                <app-card-gmaps></app-card-gmaps>
+                <app-card-gmaps (data_location)="getDataLocation($event)"></app-card-gmaps>
             </div>
         </div>
 

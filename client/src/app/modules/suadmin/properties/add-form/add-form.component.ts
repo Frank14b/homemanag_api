@@ -1,15 +1,14 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, NgForm, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FuseAlertType } from '@fuse/components/alert';
 import { appCities } from 'app/core/utils/app.cities';
 import { appCountries } from 'app/core/utils/app.countries';
 import { appUtils } from 'app/core/utils/app.utils';
-import { map } from 'rxjs';
 import { PropertyTypesService } from '../../property-types/property-types.service';
 import { ResultListDto, ResultTypeDto } from '../../property-types/property-types.types';
 import { PropertiesService } from '../properties.service';
-import { ResultPropertiesListDto } from '../properties.types';
+import { DataLocation, ResultPropertiesListDto } from '../properties.types';
 
 @Component({
   selector: 'app-add-form',
@@ -32,6 +31,7 @@ export class AddFormComponent implements OnInit {
   allCities = [];
   displayCities = [];
   isLoadingType: boolean = false;
+  dataLocation: DataLocation;
 
   alert: { type: FuseAlertType; message: string } = {
     type: 'success',
@@ -60,9 +60,7 @@ export class AddFormComponent implements OnInit {
       city: ['', [Validators.required]],
       shortDesc: ['n/a', [Validators.required]],
       description: ['n/a'],
-      propertyTypeId: ["", [Validators.required]],
-      cityFilter: [],
-      location: ["", [Validators.required]]
+      propertyTypeId: ["", [Validators.required]]
     });
 
     this.propertyDataForm.get("mode").valueChanges.subscribe(
@@ -89,12 +87,6 @@ export class AddFormComponent implements OnInit {
       }
     )
 
-    this.propertyDataForm.get('location').valueChanges.subscribe(
-      (value) => {
-         
-      }
-    )
-
     this.currentList = this.data.currentList
     this.allCountries = appUtils.sortedCountries(this.allCountries)
 
@@ -103,6 +95,11 @@ export class AddFormComponent implements OnInit {
     }
 
     this.getAllTypes()
+  }
+
+  getDataLocation(data:DataLocation)
+  {
+    this.dataLocation = data
   }
 
   nextStepper(): void {

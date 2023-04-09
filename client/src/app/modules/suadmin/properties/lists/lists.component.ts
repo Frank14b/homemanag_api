@@ -35,10 +35,6 @@ export class ListsComponent {
     public _propertiesServices: PropertiesService
   ) { }
 
-  ngOnInit(): void {
-    navigator.geolocation.getCurrentPosition((position: any) => {})
-  }
-
   ngAfterViewInit(): void {
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
