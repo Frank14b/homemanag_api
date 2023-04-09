@@ -10,8 +10,8 @@ export type ResultPropertiesListDto = [
         address: string,
         country: string,
         city: string,
-        lng: string,
-        lat: string,
+        lng: number,
+        lat: number,
         status: number,
         businessId: number,
         userId: number,
@@ -41,8 +41,8 @@ export type CreatePropertyDto = {
     address: string,
     country: string,
     city: string,
-    lng: string,
-    lat: string,
+    lng: number,
+    lat: number,
     businessId: number,
     propertyTypeId: number
 }
@@ -55,8 +55,8 @@ export type UpdatePropertyDto = {
     address: string,
     country: string,
     city: string,
-    lng: string,
-    lat: string,
+    lng: number,
+    lat: number,
     businessId: number,
     propertyTypeId: number
 }

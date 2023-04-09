@@ -8,7 +8,7 @@ import { appUtils } from 'app/core/utils/app.utils';
 import { PropertyTypesService } from '../../property-types/property-types.service';
 import { ResultListDto, ResultTypeDto } from '../../property-types/property-types.types';
 import { PropertiesService } from '../properties.service';
-import { DataLocation, ResultPropertiesListDto } from '../properties.types';
+import { CreatePropertyDto, DataLocation, ResultPropertiesListDto } from '../properties.types';
 
 @Component({
   selector: 'app-add-form',
@@ -120,9 +120,9 @@ export class AddFormComponent implements OnInit {
   }
 
   /**
-     *  create type
+     *  create property
      */
-  createType(): void {
+  createProperty(): void {
     // Return if the form is invalid
     if (this.addPropertyForm.invalid) {
       return;
@@ -132,8 +132,12 @@ export class AddFormComponent implements OnInit {
     this.isLoading = true;
     this.showAlert = false;
 
+    var propertyData:CreatePropertyDto = this.addPropertyForm.value
+    propertyData.lat = this.dataLocation.lat
+    propertyData.lng = this.dataLocation.lng
+
     // Create New Type
-    this._properties.createProperty(this.addPropertyForm.value)
+    this._properties.createProperty(propertyData)
       .subscribe(
         () => {
           // Reset the form
@@ -157,9 +161,9 @@ export class AddFormComponent implements OnInit {
   }
 
   /**
-    *  create type
+    *  create property
     */
-  updateType(): void {
+  updateProperty(): void {
     // Return if the form is invalid
     if (this.addPropertyForm.invalid) {
       return;

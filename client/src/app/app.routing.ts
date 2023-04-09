@@ -104,9 +104,10 @@ export const appRoutes: Route[] = [
         canMatch: [AuthAdminGuard],
         component: LayoutComponent,
         resolve: {
-            initialData: InitialDataResolver,
+            initialData: InitialDataResolver, //all-business
         },
         children: [
+            {path: 'all-business', loadChildren: () => import('app/modules/suadmin/business/lists/lists.module'). then(m => m.ListsModule)},
             {path: 'property/types', loadChildren: () => import('app/modules/suadmin/property-types/property-types.module'). then(m => m.PropertyTypesModule)},
             {path: 'all-properties', loadChildren: () => import('app/modules/suadmin/properties/lists/lists.module'). then(m => m.ListsModule)},
             {path: 'roles/access', loadChildren: () => import('app/modules/suadmin/users/access/access.module'). then(m => m.AccessModule)},

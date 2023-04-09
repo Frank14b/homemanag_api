@@ -86,6 +86,13 @@
             <div class="w-full px-0" *ngIf="stepper == 4">
                 
                 <app-card-gmaps (data_location)="getDataLocation($event)"></app-card-gmaps>
+                
+                <div class="w-full mt-6" *ngIf="dataLocation">
+                    <p><b>Country : </b> {{dataLocation?.country}}</p>
+                    <p><b>City : </b> {{dataLocation?.city}}</p>
+                    <p><b>Lat : </b> {{dataLocation?.lat}}</p>
+                    <p><b>Lng : </b> {{dataLocation?.lng}}</p>
+                </div>
             </div>
         </div>
 
@@ -109,9 +116,9 @@
         <button mat-button type="button" (click)="prevStepper()" *ngIf="stepper != 1">Prev</button>
         <button mat-button type="button" (click)="nextStepper()" *ngIf="stepper != 4">Next</button>
 
-        <button mat-button *ngIf="!isUpdate && stepper == 4" (click)="createType()" cdkFocusInitial
+        <button mat-button *ngIf="!isUpdate && stepper == 4" (click)="createProperty()" cdkFocusInitial
             [disabled]="isLoading">Save New</button>
-        <button mat-button *ngIf="isUpdate && stepper == 4" (click)="updateType()" cdkFocusInitial
+        <button mat-button *ngIf="isUpdate && stepper == 4" (click)="updateProperty()" cdkFocusInitial
             [disabled]="isLoading">Save Update</button>
     </mat-dialog-actions>
 </form>
