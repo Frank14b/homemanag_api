@@ -1,1 +1,111 @@
-<p>properties works!</p>
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+
+    <!-- Header -->
+    <div
+        class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+        <!-- Loader -->
+        <div class="absolute inset-x-0 bottom-0" *ngIf="isLoading">
+            <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+        </div>
+        <!-- Title -->
+        <div class="text-4xl font-extrabold tracking-tight">Properties</div>
+        <!-- Actions -->
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+            <!-- Search -->
+            <mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64" [subscriptSizing]="'dynamic'">
+                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'"
+                    [placeholder]="'Search products'">
+            </mat-form-field>
+            <!-- Add product button -->
+            <button class="ml-4" mat-flat-button [color]="'primary'" (click)="createProduct()">
+                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                <span class="ml-2 mr-1">Add</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="relative w-full">
+        <div class="example-container mat-elevation-z8">
+            <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+                <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+                <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+                    <!-- GitHub's API rate limit has been reached. It will be reset in one minute. -->
+                </div>
+            </div>
+
+            <div class="example-table-container" style="height: 65vh; overflow-y: auto;">
+
+                <table mat-table [dataSource]="allProperties" class="example-table" matSort matSortActive="name"
+                    matSortDisableClear matSortDirection="desc">
+                    <!-- Number Column -->
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef>#</th>
+                        <td mat-cell *matCellDef="let row">{{row.id}}</td>
+                    </ng-container>
+
+                    <!-- Title Column -->
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>Name</th>
+                        <td mat-cell *matCellDef="let row">{{row.name}}</td>
+                    </ng-container>
+
+                    <!-- Title Column -->
+                    <ng-container matColumnDef="subtype">
+                        <th mat-header-cell *matHeaderCellDef>Sub Type</th>
+                        <td mat-cell *matCellDef="let row">{{row.subTypeId}}</td>
+                    </ng-container>
+
+                    <!-- State Column -->
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef>Active</th>
+                        <td mat-cell *matCellDef="let row">
+                            <span class="bagde" *ngIf="row.status == 1">
+                                <mat-icon
+                                class="text-green-400 icon-size-5"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            </span>
+                            <span class="bagde" *ngIf="row.status == 0">
+                                <mat-icon
+                                class="text-grey-400 icon-size-5"
+                                [svgIcon]="'heroicons_solid:x'"></mat-icon>
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <!-- Created Column -->
+                    <ng-container matColumnDef="createdAt">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+                            Created
+                        </th>
+                        <td mat-cell *matCellDef="let row">{{row.createdAt | date}}</td>
+                    </ng-container>
+
+                    <!-- Action Column -->
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>Action</th>
+                        <td mat-cell *matCellDef="let row">
+                            <button class="mx-8" (click)="editProperty(row)">
+                                <mat-icon
+                                class="text-grey-400 icon-size-5"
+                                [svgIcon]="'heroicons_solid:pencil'"></mat-icon>
+                            </button>
+                            <button (click)="deleteProperty(row.id)">
+                                <mat-icon
+                                class="text-red-400 icon-size-5"
+                                [svgIcon]="'heroicons_solid:trash'"></mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+
+            <mat-paginator [length]="resultsLength" [pageSize]="itemPerPage"
+                aria-label="Select page of GitHub search results"></mat-paginator>
+        </div>
+    </div>
+
+</div>

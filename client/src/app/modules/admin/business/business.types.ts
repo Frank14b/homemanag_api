@@ -45,7 +45,6 @@ export type CreateBusinessDto = {
 }
 
 export type UpdateBusinessDto = {
-    id: number
     name: string,
     description: string,
     address: string,

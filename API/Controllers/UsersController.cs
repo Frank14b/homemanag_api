@@ -21,13 +21,15 @@ namespace API.Controllers
         private readonly ITokenService _tokenService;
         private UsersCommon _userCommon;
         private IMapper _mapper;
+        private IConfiguration _configuration;
 
-        public UsersController(DataContext context, ITokenService tokenService, IMapper mapper)
+        public UsersController(DataContext context, ITokenService tokenService, IMapper mapper, IConfiguration configuration)
         {
             this._context = context;
             this._tokenService = tokenService;
             this._mapper = mapper;
             this._userCommon = new UsersCommon(context);
+            this._configuration = configuration;
         }
 
         [HttpGet("getall")]
@@ -115,6 +117,57 @@ namespace API.Controllers
             await this._context.SaveChangesAsync();
 
             return user;
+        }
+
+        [AllowAnonymous]
+        [HttpPost("google-auth")]
+        public async Task<ActionResult<ResultloginDto>> LoginWithGoogle(SocialAuthDto data)
+        {
+            if(!await this._userCommon.CheckGoogleAuthToken(data.SocialToken, this._configuration.GetValue<string>("googleTokenHost"))) {
+                return Unauthorized("Invalid auth token");
+            }
+
+            if (await this._userCommon.UserNameExist(data.Username)) {
+                data.Username = data.Username + "-"+ data.Email.GetHashCode();
+            }
+
+            if (await this._userCommon.UserEmailExist(data.Email)) {
+                var result = await this._context.Users.SingleOrDefaultAsync(x => ((x.Email == data.Email)) && x.Role != (int)RoleEnum.suadmin && x.Status != (int)StatusEnum.delete);
+
+                var finalresult1 = this._mapper.Map<ResultloginDto>(result);
+
+                if(result.Status == (int)StatusEnum.disable) return Ok("Your account is disabled. Please Contact the admin");
+
+                finalresult1.Token = this._tokenService.CreateToken(result);
+
+                return finalresult1;
+            }
+
+            using var hmac = new HMACSHA512();
+
+            var user = new AppUser
+            {
+                UserName = data.Username,
+                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(data.Username + data.Username.GetHashCode())),
+                PasswordSalt = hmac.Key,
+                FirstName = data.Firstname,
+                LastName = data.Lastname,
+                Email = data.Email,
+                Role = ((int)RoleEnum.user),
+                Status = ((int)StatusEnum.enable),
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+            };
+
+            this._context.Users.Add(user);
+
+            await this._context.SaveChangesAsync();
+
+            var finalresult = this._mapper.Map<ResultloginDto>(user);
+
+            finalresult.Token = this._tokenService.CreateToken(user);
+
+            return finalresult;
         }
 
         [HttpPost("validate-token")]

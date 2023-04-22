@@ -2,7 +2,8 @@ using API.UsersDTOs;
 
 namespace API.DTOs.Business
 {
-    public class BusinessResultDtos
+
+    public class BusinessResultListDto
     {
         public int Id {get; set;}
 
@@ -20,9 +21,9 @@ namespace API.DTOs.Business
 
         public string City {get; set;}
 
-        public string Lng {get; set;}
+        public int Lng {get; set;}
 
-        public string Lat {get; set;}
+        public int Lat {get; set;}
 
         public int CountryCode {get; set;}
 
@@ -37,6 +38,15 @@ namespace API.DTOs.Business
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }
+    }
+
+    public class BusinessResultDto 
+    {
+        public IEnumerable<BusinessResultListDto> Data {get; set;}
+        public int Total {get; set;}
+        public int Skip {get; set;}
+        public int Limit {get; set;}
+        public string Sort {get; set;}
     }
 
     public class DeleteBusinessResultDto

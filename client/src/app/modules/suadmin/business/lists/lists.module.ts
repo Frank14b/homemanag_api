@@ -19,6 +19,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { FuseAlertModule } from '@fuse/components/alert';
 import { MatTableModule } from '@angular/material/table';
 import { ListsComponent } from './lists.component';
+import { AddFormComponent } from '../add-form/add-form.component';
 
 const exampleRoutes: Route[] = [
   {
@@ -29,7 +30,8 @@ const exampleRoutes: Route[] = [
 
 @NgModule({
   declarations: [
-    ListsComponent
+    ListsComponent,
+    AddFormComponent
   ],
   imports: [
     RouterModule.forChild(exampleRoutes),

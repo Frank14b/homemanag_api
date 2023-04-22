@@ -44,7 +44,7 @@ namespace API.Commons
             var test = validateGuidRegex.IsMatch(password);
             return true;
         }
-        public String Deletedkeyword {get;} = "deleted_";
+        public String Deletedkeyword { get; } = "deleted_";
 
         public ArrayList UserStatus()
         {
@@ -61,7 +61,8 @@ namespace API.Commons
             var employees = 0;
             var allUsers = 0;
 
-            if(userbusiness.Count > 0){
+            if (userbusiness.Count > 0)
+            {
                 var resultEmployees = this._context.Users.Where(x => x.Status == (int)StatusEnum.enable && x.Role != (int)RoleEnum.suadmin && x.UserProperties.All(up => userbusiness.Contains(up.Property.BusinessId) && up.IsEmployee)).ToList();
                 employees = resultEmployees.Count;
 
@@ -76,20 +77,43 @@ namespace API.Commons
                 _propertyList.Add(userProperties[i].PropertyId);
             }
 
-            if(_propertyList.Count > 0) {
-                var resultEmployees2 = this._context.Users.Where(x => x.Status == (int)StatusEnum.enable  && x.Role != (int)RoleEnum.suadmin && x.UserProperties.All(up => _propertyList.Contains(up.PropertyId) && up.IsEmployee)).ToList();
+            if (_propertyList.Count > 0)
+            {
+                var resultEmployees2 = this._context.Users.Where(x => x.Status == (int)StatusEnum.enable && x.Role != (int)RoleEnum.suadmin && x.UserProperties.All(up => _propertyList.Contains(up.PropertyId) && up.IsEmployee)).ToList();
                 employees = employees + resultEmployees2.Count;
 
-                var resultAllUsers2 = this._context.Users.Where(x => x.Status == (int)StatusEnum.enable  && x.Role != (int)RoleEnum.suadmin && x.UserProperties.All(up => _propertyList.Contains(up.PropertyId))).ToList();
+                var resultAllUsers2 = this._context.Users.Where(x => x.Status == (int)StatusEnum.enable && x.Role != (int)RoleEnum.suadmin && x.UserProperties.All(up => _propertyList.Contains(up.PropertyId))).ToList();
                 allUsers = allUsers + resultAllUsers2.Count;
             }
-            
-            var result = new TotalUsersDto{
+
+            var result = new TotalUsersDto
+            {
                 employees = employees,
                 all = allUsers
             };
 
             return result;
+        }
+
+        public async Task<Boolean> CheckGoogleAuthToken(string token = "", string urlHost= "")
+        {
+            try
+            {
+                string url = urlHost + "/tokeninfo?id_token=" + token;
+
+                var client = new HttpClient();
+                var result = await client.GetAsync(url);
+
+                if(result.IsSuccessStatusCode) {
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
         }
     }
 }

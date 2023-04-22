@@ -1,0 +1,124 @@
+<h2 mat-dialog-title *ngIf="!isUpdate">Create new property</h2>
+<h2 mat-dialog-title *ngIf="isUpdate">Update selected property</h2>
+
+<form #addTypeForm="ngForm" [formGroup]="propertyDataForm">
+
+    <mat-dialog-content class="mat-typography mt-6 modal-content">
+
+        <div class="w-full" *ngIf="stepper == 1">
+            <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Property Mode</mat-label>
+                <mat-select id="mode" [formControlName]="'mode'">
+                    <mat-option value="0">Parent Property</mat-option>
+                    <mat-option value="1">Sub Property</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Property Name</mat-label>
+                <input matInput id="name" [formControlName]="'name'">
+                <mat-error *ngIf="propertyDataForm.get('name').hasError('required')">
+                    Name is required
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Category</mat-label>
+                <mat-select id="propertyTypeId" [formControlName]="'propertyTypeId'">
+                    <mat-option *ngFor="let ptype of currentListType" [value]="ptype.id">{{ ptype.name }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div *ngIf="propertyMode == 0">
+            <div class="w-full" *ngIf="stepper == 2">
+                <mat-form-field appearance="fill" class="w-full">
+                    <mat-label>Address</mat-label>
+                    <input matInput id="address" placeholder="Area, Street, Town, ..." [formControlName]="'address'">
+                    <mat-error *ngIf="propertyDataForm.get('address').hasError('required')">
+                        Address is required
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="fill" class="w-full">
+                    <mat-label>Country</mat-label>
+                    <mat-select id="country" [formControlName]="'country'">
+                        <mat-option value="0"></mat-option>
+                        <mat-option *ngFor="let country of allCountries" [value]="country?.name?.common">{{
+                            country?.name?.common }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="fill" class="w-full">
+                    <mat-label>City</mat-label>
+                    <mat-select id="city" [formControlName]="'city'">
+
+                        <mat-form-field appearance="fill" class="w-full">
+                            <mat-label>Filter</mat-label>
+                            <input [formControlName]="'cityFilter'" matInput id="cityFilter"
+                                placeholder="Enter city name">
+                        </mat-form-field>
+
+                        <mat-option *ngFor="let city of displayCities" [value]="city">{{ city }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="w-full" *ngIf="stepper == 3">
+                <mat-form-field appearance="fill" class="w-full">
+                    <mat-label>Short Description</mat-label>
+                    <textarea matInput maxlength="500" id="shortDesc" [formControlName]="'shortDesc'"></textarea>
+                    <mat-error *ngIf="propertyDataForm.get('shortDesc').hasError('required')">
+                        Short description is required
+                    </mat-error>
+                    <mat-error *ngIf="propertyDataForm.get('shortDesc').hasError('length')">
+                        Description length should be less than 501
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" class="w-full">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput maxlength="2000" id="description" [formControlName]="'description'"></textarea>
+                    <mat-error *ngIf="propertyDataForm.get('description').hasError('required')">
+                        Description length should be less than 2001
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="w-full px-0" *ngIf="stepper == 4">
+                
+                <app-card-gmaps (data_location)="getDataLocation($event)"></app-card-gmaps>
+                
+                <div class="w-full mt-6" *ngIf="dataLocation">
+                    <p><b>Country : </b> {{dataLocation?.country}}</p>
+                    <p><b>City : </b> {{dataLocation?.city}}</p>
+                    <p><b>Lat : </b> {{dataLocation?.lat}}</p>
+                    <p><b>Lng : </b> {{dataLocation?.lng}}</p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Loader -->
+        <div class="inset-x-0 bottom-0" *ngIf="isLoading">
+            Loading...
+            <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+        </div>
+
+        <!-- Alert -->
+        <fuse-alert class="mt-2" *ngIf="showAlert" [appearance]="'border'" [showIcon]="false" [type]="alert.type"
+            [@shake]="alert.type === 'error'">
+            {{alert.message}}
+        </fuse-alert>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close *ngIf="stepper == 1">Cancel</button>
+
+        <button mat-button type="button" (click)="prevStepper()" *ngIf="stepper != 1">Prev</button>
+        <button mat-button type="button" (click)="nextStepper()" *ngIf="stepper != 4">Next</button>
+
+        <button mat-button *ngIf="!isUpdate && stepper == 4" (click)="createProperty()" cdkFocusInitial
+            [disabled]="isLoading">Save New</button>
+        <button mat-button *ngIf="isUpdate && stepper == 4" (click)="updateProperty()" cdkFocusInitial
+            [disabled]="isLoading">Save Update</button>
+    </mat-dialog-actions>
+</form>

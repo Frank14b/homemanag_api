@@ -1,7 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-
 import { ViewChild, AfterViewInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, SortDirection } from '@angular/material/sort';
@@ -113,7 +112,7 @@ export class ListsComponent {
     const dialogRef = this.dialog.open(AddFormComponent, {
       data: {
         currentList: this._businessService,
-        defaultType: null
+        defaultBusiness: null
       }
     });
 
@@ -126,7 +125,7 @@ export class ListsComponent {
     const dialogRef = this.dialog.open(AddFormComponent, {
       data: {
         currentList: this.allBusiness,
-        defaultType: _data
+        defaultBusiness: _data
       }
     });
 

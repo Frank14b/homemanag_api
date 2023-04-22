@@ -16,7 +16,7 @@ namespace API.DTOs.Roles
 
         public int BusinessId {get; set;}
 
-        public BusinessResultDtos Business {get; set;}
+        public BusinessResultListDto Business {get; set;}
 
         public DateTime CreatedAt {get; set;}
     }

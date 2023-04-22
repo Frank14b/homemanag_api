@@ -34,6 +34,30 @@ namespace API.UsersDTOs
         public string Password {get; set;}
     }
 
+    public class SocialAuthDto
+    {
+        [Required]
+        [MinLength(3)]
+        public string Username {get; set;}
+
+        [Required]
+        [MinLength(3)]
+        public string Firstname {get; set;}
+        public string Lastname {get; set;}
+
+        [Required]
+        [EmailAddress]
+        public string Email {get; set;}
+        [Required]
+        public string SocialId {get; set;}
+        [Required]
+        public string SocialToken {get; set;}
+        [Required]
+        public string PhotoUrl {get; set;}
+        [Required]
+        public string Provider {get; set;}
+    }
+
     public class DeleteUserDto
     {
         [Required]

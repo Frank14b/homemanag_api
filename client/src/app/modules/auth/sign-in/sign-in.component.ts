@@ -1,9 +1,15 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
+import {
+    SocialAuthService,
+    GoogleLoginProvider,
+    SocialUser,
+  } from '@abacritt/angularx-social-login';
+import { environment } from 'environments';
 
 @Component({
     selector     : 'auth-sign-in',
@@ -15,12 +21,17 @@ export class AuthSignInComponent implements OnInit
 {
     @ViewChild('signInNgForm') signInNgForm: NgForm;
 
+    @ViewChild('loginRef', {static: true }) loginElement!: ElementRef;
+
     alert: { type: FuseAlertType; message: string } = {
         type   : 'success',
         message: ''
     };
     signInForm: UntypedFormGroup;
     showAlert: boolean = false;
+    socialUser!: SocialUser;
+    auth2: any;
+    google_client_id:any = environment.GOOGLE_CLIENT_ID
 
     /**
      * Constructor
@@ -29,10 +40,9 @@ export class AuthSignInComponent implements OnInit
         private _activatedRoute: ActivatedRoute,
         private _authService: AuthService,
         private _formBuilder: UntypedFormBuilder,
-        private _router: Router
-    )
-    {
-    }
+        private _router: Router,
+        private socialAuthService: SocialAuthService
+    ){}
 
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -43,11 +53,49 @@ export class AuthSignInComponent implements OnInit
      */
     ngOnInit(): void
     {
+        this.socialAuthService.signOut()
+
         // Create the form
         this.signInForm = this._formBuilder.group({
             login     : ['user', [Validators.required]],
             password  : ['admin', Validators.required],
             rememberMe: ['']
+        });
+
+        this.socialAuthService.authState.subscribe((user) => {
+            this.socialUser = user;
+
+            this._authService.socialSignUp(
+                {
+                    username: this.socialUser.name,
+                    email: this.socialUser.email,
+                    firstname: this.socialUser.firstName,
+                    lastname: this.socialUser.lastName,
+                    socialid: this.socialUser.id,
+                    socialtoken: this.socialUser.idToken,
+                    provider: this.socialUser.provider,
+                    photourl: this.socialUser.photoUrl
+                }
+            ).subscribe(
+                () => {
+
+                    // Navigate to the confirmation required page
+                    const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/signed-in-redirect';
+
+                    // Navigate to the redirect url
+                    this._router.navigateByUrl(redirectURL);
+                },
+                (response) => {
+                    // Set the alert
+                    this.alert = {
+                        type   : 'error',
+                        message: 'Something went wrong, please try again.'
+                    };
+
+                    // Show the alert
+                    this.showAlert = true;
+                }
+            );
         });
     }
 
@@ -105,5 +153,11 @@ export class AuthSignInComponent implements OnInit
                     this.showAlert = true;
                 }
             );
+    }
+
+    //login using google social oauth2.0
+    loginWithGoogle(): void
+    {
+        this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
     }
 }

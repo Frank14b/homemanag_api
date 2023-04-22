@@ -21,7 +21,6 @@ import { FuseAlertModule } from '@fuse/components/alert';
 import { MatTableModule } from '@angular/material/table';
 import { SharedModule } from 'app/shared/shared.module';
 import { GoogleMapsModule } from '@angular/google-maps';
-import { CardGmapsComponent } from 'app/modules/card-gmaps/card-gmaps.component';
 
 const exampleRoutes: Route[] = [
   {
@@ -34,7 +33,7 @@ const exampleRoutes: Route[] = [
   declarations: [
     AddFormComponent,
     ListsComponent,
-    CardGmapsComponent
+    // CardGmapsComponent
   ],
   imports: [
     RouterModule.forChild(exampleRoutes),

@@ -13,7 +13,31 @@
                     Name is required
                 </mat-error>
             </mat-form-field>
-            
+
+            <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Email</mat-label>
+                <input matInput id="email" [formControlName]="'email'">
+                <mat-error *ngIf="businessDataForm.get('email').hasError('required')">
+                    Email Address is required
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Country</mat-label>
+                <mat-select id="country" [formControlName]="'country'">
+                    <mat-option value="0"></mat-option>
+                    <mat-option *ngFor="let country of allCountries" [value]="country?.name?.common">
+                        {{country?.flag}} {{country?.name?.common }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Phone Number</mat-label>
+                <span matPrefix> {{countryFlag}} {{businessDataForm.get("countryCode").value}} &nbsp;</span>
+                <input type="tel" matInput id="phoneNumber" [formControlName]="'phoneNumber'"
+                    placeholder="555-555-1234">
+            </mat-form-field>
+
             <mat-form-field appearance="fill" class="w-full">
                 <mat-label>Address</mat-label>
                 <input matInput id="address" [formControlName]="'address'">
@@ -43,7 +67,9 @@
 
     <mat-dialog-actions align="end">
         <button mat-button mat-dialog-close>Cancel</button>
-        <button mat-button *ngIf="!isUpdate" (click)="createType()" cdkFocusInitial [disabled]="isLoading">Save New</button>
-        <button mat-button *ngIf="isUpdate" (click)="updateType()" cdkFocusInitial [disabled]="isLoading">Save Update</button>
+        <button mat-button *ngIf="!isUpdate" (click)="createType()" cdkFocusInitial [disabled]="isLoading">Save
+            New</button>
+        <button mat-button *ngIf="isUpdate" (click)="updateType()" cdkFocusInitial [disabled]="isLoading">Save
+            Update</button>
     </mat-dialog-actions>
 </form>

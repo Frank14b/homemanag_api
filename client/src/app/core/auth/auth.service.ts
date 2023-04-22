@@ -14,7 +14,7 @@ export class AuthService {
      */
     constructor(
         private _httpClient: HttpClient,
-        private _userService: UserService
+        private _userService: UserService,
     ) {
     }
 
@@ -34,7 +34,7 @@ export class AuthService {
     }
 
     get userRole(): string {
-        if(AuthUtils._getTokenRole(this.accessToken)) {
+        if (AuthUtils._getTokenRole(this.accessToken)) {
             return "admin"
         }
         return "user"
@@ -180,6 +180,43 @@ export class AuthService {
     }
 
     /**
+     * Social Sign up
+     *
+     * @param user
+     */
+    socialSignUp(user: { username: string; email: string; socialid: string; socialtoken: string, photourl: string, provider: string, firstname: string, lastname: string }): Observable<any> {
+        // Throw error, if the user is already logged in
+        if (this._authenticated) {
+            return throwError('User is already logged in.');
+        }
+
+        return this._httpClient.post(environment.API_HOST + 'api/users/google-auth', user).pipe(
+            catchError(() =>
+                // Return false
+                of(false)
+            ),
+            switchMap((response: any) => {
+
+                if (response.token) {
+                    // Store the access token in the local storage
+                    this.accessToken = response.token;
+
+                    // Set the authenticated flag to true
+                    this._authenticated = true;
+
+                    // Store the user on the user service
+                    this._userService.user = response;
+
+                    // Return a new observable with the response
+                    return of(response);
+                } else {
+                    return of(false);
+                }
+            })
+        );
+    }
+
+    /**
      * Unlock session
      *
      * @param credentials
@@ -214,12 +251,11 @@ export class AuthService {
     /**
      *  Check the auth role
      */
-    checkAdmin(): Observable<Boolean>
-    {
-        if(this._authenticated) {
-            if(AuthUtils._getTokenRole(this.accessToken)) {
+    checkAdmin(): Observable<Boolean> {
+        if (this._authenticated) {
+            if (AuthUtils._getTokenRole(this.accessToken)) {
                 return of(true)
-            } 
+            }
         }
 
         return of(false);

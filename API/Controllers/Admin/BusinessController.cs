@@ -8,10 +8,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Controllers
+namespace API.Controllers.Admin
 {
-    [Authorize(Policy = "IsUser")]
-    [Route("/api/business")]
+    [Authorize(Policy = "IsAdmin")]
+    [Route("/api/admin/business")]
     public class BusinessController: BaseApiController
     {
         private readonly DataContext _context;
@@ -58,43 +58,14 @@ namespace API.Controllers
         }
         
         [HttpGet("getall")]
-        public async Task<ActionResult<BusinessResultDto>> GetAllBusiness(int skip = 0, int limit = 30, string sort = "desc")
+        public async Task<ActionResult<IEnumerable<BusinessResultListDto>>> GetAllBusiness()
         {
             try
             {
-                ClaimsPrincipal currentUser = this.User;
-                var userId = Int32.Parse(currentUser.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var _business = await this._context.Business.Where(x => x.Status != (int)StatusEnum.delete).Include(p => p.User).ToListAsync();
+                var result = this._mapper.Map<IEnumerable<BusinessResultListDto>>(_business);
 
-                var query = this._context.Business.Where(x => x.Status != (int)StatusEnum.delete && x.UserId == userId);
-
-                if (sort == "desc")
-                {
-                    var _result = await query.OrderByDescending(x => x.CreatedAt).Skip(skip).Take(limit).ToListAsync();
-                    var result = this._mapper.Map<IEnumerable<BusinessResultListDto>>(_result);
-                    var rs = new BusinessResultDto
-                    {
-                        Data = result,
-                        Limit = limit,
-                        Skip = skip,
-                        Total = query.Count()
-                    };
-
-                    return Ok(rs);
-                }
-                else
-                {
-                    var _result = await query.OrderBy(x => x.CreatedAt).Skip(skip).Take(limit).ToListAsync();
-                    var result = this._mapper.Map<IEnumerable<BusinessResultListDto>>(_result);
-                    var rs = new BusinessResultDto
-                    {
-                        Data = result,
-                        Limit = limit,
-                        Skip = skip,
-                        Total = query.Count()
-                    };
-
-                    return Ok(rs);
-                }
+                return Ok(result);
             }
             catch (System.Exception)
             {
@@ -172,14 +143,7 @@ namespace API.Controllers
 
                 if(_business == null) return NotFound("Business not Found");
 
-                _business.UpdatedAt = DateTime.UtcNow;
-                _business.Name = data.Name;
-                _business.Description = data.Description;
-                _business.Country = data.Country;
-                _business.Email = data.Email;
-                _business.CountryCode = data.CountryCode;
-                _business.PhoneNumber = data.PhoneNumber;
-                _business.Address = data.Address;
+                this._mapper.Map<AppBusiness>(data);
 
                 await this._context.SaveChangesAsync();
 
@@ -187,9 +151,9 @@ namespace API.Controllers
 
                 return result;
             }
-            catch (System.Exception th)
+            catch (System.Exception)
             {
-                return BadRequest("The giving business couldn't be edited" + th);
+                return BadRequest("The giving business couldn't be edited");
             }
         }
     }

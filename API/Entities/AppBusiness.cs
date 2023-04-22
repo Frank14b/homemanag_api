@@ -25,9 +25,9 @@ namespace API.Entities
         [Required]
         public string City {get; set;}
 
-        public string Lng {get; set;}
+        public int Lng {get; set;}
 
-        public string Lat {get; set;}
+        public int Lat {get; set;}
 
         [Required]
         public int CountryCode {get; set;}
@@ -44,7 +44,7 @@ namespace API.Entities
         [Required]
         public string Reference {get; set;}
         
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }
         

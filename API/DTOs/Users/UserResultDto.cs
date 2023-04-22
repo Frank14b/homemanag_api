@@ -51,7 +51,7 @@ namespace API.UsersDTOs
         public DateOnly DateOfBirth { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public List<BusinessResultDtos> Business {get; set;}
+        public List<BusinessResultListDto> Business {get; set;}
     }
 
     public class TotalUsersDto

@@ -13,6 +13,7 @@
         "test": "ng test"
     },
     "dependencies": {
+        "@abacritt/angularx-social-login": "^2.0.0",
         "@angular/animations": "15.1.1",
         "@angular/cdk": "15.1.1",
         "@angular/common": "15.1.1",

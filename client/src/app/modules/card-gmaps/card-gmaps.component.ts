@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { GoogleMap, MapInfoWindow } from '@angular/google-maps';
-import { DataLocation } from '../suadmin/properties/properties.types';
+import { DataLocation } from 'app/modules/suadmin/properties/properties.types';
 
 @Component({
   selector: 'app-card-gmaps',

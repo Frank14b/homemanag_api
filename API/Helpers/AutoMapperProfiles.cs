@@ -25,7 +25,9 @@ namespace API.Helpers
             CreateMap<DeleteRolesDto, AppRole>();
             CreateMap<DeleteAccessDto, AppAcces>();
             CreateMap<CreateBusinessDto, AppBusiness>();
-            CreateMap<AppBusiness, BusinessResultDtos>();
+            CreateMap<AppBusiness, BusinessResultDto>();
+            CreateMap<AppBusiness, BusinessResultListDto>();
+            CreateMap<UpdateBusinessDto, AppBusiness>();
             CreateMap<RoleaccessPostDto, AppRoleAcces>();
             CreateMap<AppRoleAcces, RoleaccessResultDto>();
             CreateMap<AppPropertyType, PropertyTResultListDto>();

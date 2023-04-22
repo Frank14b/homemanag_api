@@ -24,18 +24,46 @@ namespace API.Controllers
         }
 
         [HttpGet("getall")]
-        public async Task<ActionResult<IEnumerable<PropertyTResultDto>>> GetAllType()
+        public async Task<ActionResult<PropertyTResultDto>> GetAllType(int skip = 0, int limit = 50000, string order = "desc")
         {
             try
             {
-                var _types = await this._context.PropertyTypes.Where(x => x.Status != (int)StatusEnum.delete).ToListAsync();
-                var result = this._mapper.Map<IEnumerable<PropertyTResultDto>>(_types);
+                var query = this._context.PropertyTypes.Where(x => x.Status == (int)StatusEnum.enable);
 
-                return Ok(result);
+                if (order == "desc")
+                {
+                    var _types = await query.OrderByDescending(x => x.CreatedAt).Skip(skip).Take(limit).ToListAsync();
+                    var result = this._mapper.Map<IEnumerable<PropertyTResultListDto>>(_types);
+
+                    var rs = new PropertyTResultDto
+                    {
+                        Data = result,
+                        Limit = limit,
+                        Skip = skip,
+                        Total = query.Count()
+                    };
+
+                    return Ok(rs);
+                }
+                else
+                {
+                    var _types = await query.OrderBy(x => x.CreatedAt).Skip(skip).Take(limit).ToListAsync();
+                    var result = this._mapper.Map<IEnumerable<PropertyTResultListDto>>(_types);
+
+                    var rs = new PropertyTResultDto
+                    {
+                        Data = result,
+                        Limit = limit,
+                        Skip = skip,
+                        Total = query.Count()
+                    };
+
+                    return Ok(rs);
+                }
             }
-            catch (System.Exception)
+            catch (System.Exception th)
             {
-                return BadRequest("An error occured. Please retry later");
+                return BadRequest("An error occured. Please retry later" + th);
             }
         }
 
