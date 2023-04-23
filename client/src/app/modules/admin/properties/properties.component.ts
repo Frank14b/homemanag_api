@@ -120,7 +120,7 @@ export class PropertiesComponent {
     const dialogRef = this.dialog.open(AddFormComponent, {
       data: {
         currentList: this.allProperties,
-        defaultType: _data
+        defaultProperty: _data
       }
     });
 

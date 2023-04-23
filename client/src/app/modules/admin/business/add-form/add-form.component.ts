@@ -75,17 +75,19 @@ export class AddFormComponent {
     this.businessDataForm.get("country").valueChanges.subscribe(
       (value: any) => {
         //  this.businessDataForm.get("city").setValue("")
-
-         let country_code = "";
-         let countryCode_suffix = this.allCountries.find((x) => x.name.common == value).idd.suffixes
-         if(countryCode_suffix.length == 1) {
+        if (value) {
+          let country_code = "";
+          let countryCode_suffix = this.allCountries.find((x) => x.name.common == value).idd.suffixes
+          if (countryCode_suffix.length == 1) {
             country_code = this.allCountries.find((x) => x.name.common == value).idd?.root + countryCode_suffix[0];
-         }else{
+          } else {
             country_code = this.allCountries.find((x) => x.name.common == value).idd?.root
-         }
-         this.countryFlag = this.allCountries.find((x) => x.name.common == value).flag
+          }
+          this.countryFlag = this.allCountries.find((x) => x.name.common == value).flag
 
-         this.businessDataForm.get("countryCode").setValue(parseInt(country_code));
+          this.businessDataForm.get("countryCode").setValue(parseInt(country_code));
+        }
+
         //  let iso2 = this.allCountries.find((x) => x.name.common == value).cca2;
         //  let cities = appCities.find((x) => x.iso2 == iso2);
         //  this.allCities = cities.cities;
@@ -100,7 +102,7 @@ export class AddFormComponent {
   /**
      *  create type
      */
-  createType(): void {
+  createBusiness(): void {
     // Return if the form is invalid
     if (this.addBusinessForm.invalid) {
       return;
@@ -137,7 +139,7 @@ export class AddFormComponent {
   /**
     *  create type
     */
-  updateType(): void {
+  updateBusiness(): void {
     // Return if the form is invalid
     if (this.addBusinessForm.invalid) {
       return;
@@ -149,6 +151,34 @@ export class AddFormComponent {
 
     // Create New Type
     this._businessService.updateBusiness(this.addBusinessForm.value, this.businessDataForm.get("id").value)
+      .subscribe(
+        () => {
+          // Reset the form
+          this.addBusinessForm.resetForm();
+          this.dialogRef.close();
+          // Set the alert
+        },
+        (response) => {
+          console.log(response)
+          // Set the alert
+          this.alert = {
+            type: 'error',
+            message: JSON.stringify(response.error)
+          };
+
+          this.showAlert = true
+          // hide the loading
+          this.isLoading = false;
+        }
+      );
+  }
+  updateStatus(): void {
+    // Show the loading
+    this.isLoading = true;
+    this.showAlert = false;
+
+    // Create New Type
+    this._businessService.updateStatus(this.businessDataForm.get("id").value)
       .subscribe(
         () => {
           // Reset the form

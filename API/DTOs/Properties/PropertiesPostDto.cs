@@ -14,7 +14,7 @@ namespace API.DTOs.Properties
         [MinLength(3)]
         public string Description {get; set;}
         [Required]
-        [MinLength(5)]
+        [MinLength(3)]
         public string Address {get; set;}
         [Required]
         [MinLength(3)]
@@ -23,14 +23,16 @@ namespace API.DTOs.Properties
         [MinLength(3)]
         public string City {get; set;}
         [Required]
-        public string Lng {get; set;}
+        public float Lng {get; set;}
         [Required]
-        public string Lat {get; set;}
+        public float Lat {get; set;}
         [Required]
         public int BusinessId {get; set;}
         public int UserId {get; set;}
         [Required]
         public int PropertyTypeId {get; set;}
+        public int TypeMode {get; set;}
+        public string DataLocation {get; set;}
     }
 
     public class PropertiesUpdateDto
@@ -57,9 +59,9 @@ namespace API.DTOs.Properties
         [MinLength(3)]
         public string City {get; set;}
         [Required]
-        public string Lng {get; set;}
+        public float Lng {get; set;}
         [Required]
-        public string Lat {get; set;}
+        public float Lat {get; set;}
         [Required]
         public int PropertyTypeId {get; set;}
     }

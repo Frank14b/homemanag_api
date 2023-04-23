@@ -26,22 +26,32 @@ namespace API.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<ActionResult<PropertiesResultDto>> CreateProperty(PropertiesCreateDto data)
+        public async Task<ActionResult<PropertiesResultListDto>> CreateProperty(PropertiesCreateDto data)
         {
             try
             {
-                // if(await this._propertiesCommon.PropertyExist(data.Reference)) return BadRequest("The Specified Name and SubType already exist");
+                ClaimsPrincipal currentUser = this.User;
+                var userId = Int32.Parse(currentUser.FindFirst(ClaimTypes.NameIdentifier).Value);
+                
                 var _property = this._mapper.Map<AppProperty>(data);
+
+                _property.UserId = userId;
+                _property.Status = (int)StatusEnum.enable;
+                _property.CreatedAt = DateTime.Now;
+                _property.Reference = userId +"-"+ _property.Name.GetHashCode();
+                _property.slug = _property.Name.Replace(" ", "-") +"-"+ _property.Reference.GetHashCode();
+
+                // if(await this._propertiesCommon.PropertyExist(_property.Reference)) return BadRequest("The Specified Name already exist");
 
                 this._context.Properties.Add(_property);
 
                 await this._context.SaveChangesAsync();
 
-                return this._mapper.Map<PropertiesResultDto>(_property);
+                return this._mapper.Map<PropertiesResultListDto>(_property);
             }
-            catch (System.Exception)
+            catch (System.Exception th)
             {
-                return BadRequest("An error occured. Please retry later");
+                return BadRequest("An error occured. Please retry later "+ th);
             }
         }
 
@@ -89,5 +99,57 @@ namespace API.Controllers
                 return BadRequest("An error occured. Please retry later");
             }
         }
+
+        [HttpDelete("delete/{id}")]
+        public async Task<ActionResult<PropertiesDeleteDto>> DeleteBusiness(int id)
+        {
+            try
+            {
+                var _property = await this._context.Properties.Where(x => x.Id == id && x.Status != (int)StatusEnum.delete).FirstOrDefaultAsync();
+                _property.Status = (int)StatusEnum.delete;
+                await this._context.SaveChangesAsync();
+
+                return new PropertiesDeleteDto
+                {
+                    Status = true,
+                    Message = "The giving Property has been deleted"
+                };
+            }
+            catch (System.Exception)
+            {
+                return new PropertiesDeleteDto
+                {
+                    Status = false,
+                    Message = "The giving Property counldn't been deleted"
+                };
+            }
+        }
+
+        [HttpPut("status/{id}")]
+        public async Task<ActionResult<PropertiesDeleteDto>> UpdateStatus(int id)
+        {
+            try
+            {
+                var _property = await this._context.Properties.Where(x => x.Id == id && x.Status != (int)StatusEnum.delete).FirstOrDefaultAsync();
+                
+                if(_property.Status == (int)StatusEnum.enable) { _property.Status = (int)StatusEnum.disable; } else { _property.Status = (int)StatusEnum.enable; };
+                await this._context.SaveChangesAsync();
+
+                return new PropertiesDeleteDto
+                {
+                    Status = true,
+                    Message = "The giving Property has been updated"
+                };
+            }
+            catch (System.Exception)
+            {
+                return new PropertiesDeleteDto
+                {
+                    Status = false,
+                    Message = "The giving Property counldn't been updated"
+                };
+            }
+        }
+        
     }
 }

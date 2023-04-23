@@ -17,7 +17,9 @@ export type ResultPropertiesListDto = [
         userId: number,
         propertyTypeId: number,
         createdAt: DateTime,
-        updatedAt: DateTime
+        updatedAt: DateTime,
+        typeMode: number,
+        dataLocation: string
     }
 ]
 
@@ -44,7 +46,9 @@ export type CreatePropertyDto = {
     lng: number,
     lat: number,
     businessId: number,
-    propertyTypeId: number
+    propertyTypeId: number,
+    typeMode: number,
+    dataLocation: string
 }
 
 export type UpdatePropertyDto = {
@@ -58,7 +62,9 @@ export type UpdatePropertyDto = {
     lng: number,
     lat: number,
     businessId: number,
-    propertyTypeId: number
+    propertyTypeId: number,
+    typeMode: number,
+    dataLocation: string
 }
 
 export type DataLocation = {

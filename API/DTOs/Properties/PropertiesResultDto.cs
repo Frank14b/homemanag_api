@@ -10,9 +10,11 @@ namespace API.DTOs.Properties
         public string Address {get; set;}
         public string Country {get; set;}
         public string City {get; set;}
-        public string Lng {get; set;}
-        public string Lat {get; set;}
+        public float Lng {get; set;}
+        public float Lat {get; set;}
         public string slug {get; set;}
+        public int TypeMode {get; set;}
+        public string DataLocation {get; set;}
         public int Status {get; set;}
         public int BusinessId {get; set;}
         public int UserId {get; set;}
@@ -32,7 +34,7 @@ namespace API.DTOs.Properties
 
     public class PropertiesDeleteDto
     {
-        public Boolean status {get; set;}
+        public Boolean Status {get; set;}
         public String Message {get; set;}
     }
 

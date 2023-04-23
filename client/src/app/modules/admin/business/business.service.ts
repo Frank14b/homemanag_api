@@ -35,25 +35,21 @@ export class BusinessService {
 
   createBusiness(data: CreateBusinessDto): Observable<ResultBusinessListDto>
   {
-    return this._httpClient.post<ResultBusinessListDto>(environment.API_HOST + "api/business/add", data).pipe(
-      tap((result) => {
-      })
-    );
+    return this._httpClient.post<ResultBusinessListDto>(environment.API_HOST + "api/business/add", data)
   }
 
   updateBusiness(data: UpdateBusinessDto, id: number): Observable<ResultBusinessListDto>
   {
-    return this._httpClient.put<ResultBusinessListDto>(environment.API_HOST + "api/business/update/"+id, data).pipe(
-      tap((result) => {
-      })
-    );
+    return this._httpClient.put<ResultBusinessListDto>(environment.API_HOST + "api/business/update/"+id, data)
+  }
+
+  updateStatus(id: number): Observable<ResultBusinessListDto>
+  {
+    return this._httpClient.put<ResultBusinessListDto>(environment.API_HOST + "api/business/status/"+id, {})
   }
 
   deleteBusiness(id: number): Observable<ResultDeleteDto>
   {
-    return this._httpClient.delete<ResultDeleteDto>(environment.API_HOST + "api/business/delete/"+id).pipe(
-      tap((result) => {
-      })
-    );
+    return this._httpClient.delete<ResultDeleteDto>(environment.API_HOST + "api/business/delete/"+id)
   }
 }

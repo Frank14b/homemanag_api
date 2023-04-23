@@ -9,6 +9,9 @@ import { PropertyTypesService } from '../property-types.service';
 import { ResultListDto, ResultTypeDto } from '../property-types.types';
 import { PropertiesService } from '../properties.service';
 import { CreatePropertyDto, DataLocation, ResultPropertiesListDto } from '../properties.types';
+import { ResultBusinessDto } from '../../business/business.types';
+import { BusinessService } from '../../business/business.service';
+import { ResultBusinessListDto } from 'app/modules/suadmin/business/business.types';
 
 @Component({
   selector: 'app-add-form',
@@ -32,6 +35,7 @@ export class AddFormComponent implements OnInit {
   displayCities = [];
   isLoadingType: boolean = false;
   dataLocation: DataLocation;
+  userBusiness: ResultBusinessDto
 
   alert: { type: FuseAlertType; message: string } = {
     type: 'success',
@@ -42,8 +46,9 @@ export class AddFormComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _properties: PropertiesService,
     private _propertyTypeServices: PropertyTypesService,
+    private _businessServices: BusinessService,
     public dialogRef: MatDialogRef<AddFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { currentList: ResultPropertiesListDto, defaultType: any }
+    @Inject(MAT_DIALOG_DATA) public data: { currentList: ResultPropertiesListDto, defaultProperty: any }
   ) { }
 
   /**
@@ -61,8 +66,35 @@ export class AddFormComponent implements OnInit {
       shortDesc: ['n/a', [Validators.required]],
       cityFilter: [''],
       description: ['n/a'],
-      propertyTypeId: ["", [Validators.required]]
+      propertyTypeId: ["", [Validators.required]],
+      businessId: ['', [Validators.required]]
     });
+
+    if (this.data.defaultProperty != null) {
+      this.propertyDataForm.get("id").setValue(this.data.defaultProperty.id);
+      // this.propertyDataForm.get("mode").setValue(this.data.defaultProperty.mode);
+      this.propertyDataForm.get("name").setValue(this.data.defaultProperty.name);
+      this.propertyDataForm.get("address").setValue(this.data.defaultProperty.address);
+      this.propertyDataForm.get("country").setValue(this.data.defaultProperty.country);
+      this.propertyDataForm.get("city").setValue(this.data.defaultProperty.city);
+      this.propertyDataForm.get("shortDesc").setValue(this.data.defaultProperty.shortDesc);
+      this.propertyDataForm.get("description").setValue(this.data.defaultProperty.description);
+      this.propertyDataForm.get("propertyTypeId").setValue(this.data.defaultProperty.propertyTypeId);
+      this.propertyDataForm.get("businessId").setValue(this.data.defaultProperty.businessId);
+      this.propertyDataForm.get("mode").setValue(this.data.defaultProperty.typeMode);
+
+      this.filterCityByCountry(this.data.defaultProperty.country)
+      
+      this.dataLocation = {
+        name: "",
+        country: "",
+        city: "",
+        countryCode: "",
+        url: "",
+        lat: this.data.defaultProperty.lat,
+        lng: this.data.defaultProperty.lng
+      }
+    }
 
     this.propertyDataForm.get("mode").valueChanges.subscribe(
       (value: any) => {
@@ -70,22 +102,21 @@ export class AddFormComponent implements OnInit {
       }
     )
 
-    if(this.stepper == 1){
+    if (this.stepper == 1) {
       this.propertyDataForm.get("country").valueChanges.subscribe(
         (value: any) => {
-           this.propertyDataForm.get("city").setValue("")
-           let iso2 = this.allCountries.find((x) => x.name.common == value).cca2;
-           let cities = appCities.find((x) => x.iso2 == iso2);
-           this.allCities = cities.cities;
-           this.displayCities = this.allCities.slice(0, 100)
+          this.propertyDataForm.get("city").setValue("")
+          if(value) {
+            this.filterCityByCountry(value)
+          }
         }
       )
-  
+
       this.propertyDataForm.get("cityFilter").valueChanges.subscribe(
         (value: any) => {
-           let data = this.allCities.filter((city) => city.toLowerCase().includes(value.toLowerCase()))
-  
-           this.displayCities = data.slice(0, 100)
+          let data = this.allCities.filter((city) => city.toLowerCase().includes(value.toLowerCase()))
+
+          this.displayCities = data.slice(0, 100)
         }
       )
     }
@@ -93,15 +124,22 @@ export class AddFormComponent implements OnInit {
     this.currentList = this.data.currentList
     this.allCountries = appUtils.sortedCountries(this.allCountries)
 
-    if (this.data.defaultType != null) {
+    if (this.data.defaultProperty != null) {
       this.isUpdate = true
     }
 
     this.getAllTypes()
+    this.getAllBusiness()
   }
 
-  getDataLocation(data:DataLocation)
-  {
+  filterCityByCountry(country): void {
+    let iso2 = this.allCountries.find((x) => x.name.common == country).cca2;
+    let cities = appCities.find((x) => x.iso2 == iso2);
+    this.allCities = cities.cities;
+    this.displayCities = this.allCities.slice(0, 100)
+  }
+
+  getDataLocation(data: DataLocation) {
     this.dataLocation = data
   }
 
@@ -115,11 +153,20 @@ export class AddFormComponent implements OnInit {
 
   getAllTypes(): void {
     this.isLoading = true
-    this._propertyTypeServices.getAllPropertyTypes(0, 5000, "desc").pipe()
-    .subscribe((result: ResultListDto) => {
-      this.currentListType = result.data
-      this.isLoading = false
-    })
+    this._propertyTypeServices.getAllPropertyTypes(0, 5000, "asc").pipe()
+      .subscribe((result: ResultListDto) => {
+        this.currentListType = result.data
+        this.isLoading = false
+      })
+  }
+
+  getAllBusiness(): void {
+    this.isLoading = true
+    this._businessServices.getAllBusiness(0, 5000, "asc").pipe()
+      .subscribe((result: ResultBusinessListDto) => {
+        this.userBusiness = result.data
+        this.isLoading = false
+      })
   }
 
   /**
@@ -127,7 +174,7 @@ export class AddFormComponent implements OnInit {
      */
   createProperty(): void {
     // Return if the form is invalid
-    if (this.addPropertyForm.invalid) {
+    if (this.propertyDataForm.invalid) {
       return;
     }
 
@@ -135,7 +182,7 @@ export class AddFormComponent implements OnInit {
     this.isLoading = true;
     this.showAlert = false;
 
-    var propertyData:CreatePropertyDto = this.addPropertyForm.value
+    var propertyData: CreatePropertyDto = this.propertyDataForm.value
     propertyData.lat = this.dataLocation.lat
     propertyData.lng = this.dataLocation.lng
 
@@ -144,7 +191,7 @@ export class AddFormComponent implements OnInit {
       .subscribe(
         () => {
           // Reset the form
-          this.addPropertyForm.resetForm();
+          // this.addPropertyForm.resetForm();
           this.dialogRef.close();
           // Set the alert
         },
@@ -168,7 +215,7 @@ export class AddFormComponent implements OnInit {
     */
   updateProperty(): void {
     // Return if the form is invalid
-    if (this.addPropertyForm.invalid) {
+    if (this.propertyDataForm.invalid) {
       return;
     }
 
@@ -177,11 +224,11 @@ export class AddFormComponent implements OnInit {
     this.showAlert = false;
 
     // Create New Type
-    this._properties.updateProperty(this.addPropertyForm.value)
+    this._properties.updateProperty(this.propertyDataForm.value)
       .subscribe(
         () => {
           // Reset the form
-          this.addPropertyForm.resetForm();
+          // this.propertyDataForm.resetForm();
           this.dialogRef.close();
           // Set the alert
         },

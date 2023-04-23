@@ -138,12 +138,12 @@ namespace API.Controllers
             }
         }
 
-        [HttpDelete("delete")]
-        public async Task<ActionResult<DeleteBusinessResultDto>> DeleteBusiness(DeleteBusinessDto data)
+        [HttpDelete("delete/{id}")]
+        public async Task<ActionResult<DeleteBusinessResultDto>> DeleteBusiness(int id)
         {
             try
             {
-                var _business = await this._context.Business.Where(x => x.Id == data.Id && x.Status == (int)StatusEnum.enable).FirstOrDefaultAsync();
+                var _business = await this._context.Business.Where(x => x.Id == id && x.Status != (int)StatusEnum.delete).FirstOrDefaultAsync();
                 _business.Status = (int)StatusEnum.delete;
                 await this._context.SaveChangesAsync();
 
@@ -190,6 +190,32 @@ namespace API.Controllers
             catch (System.Exception th)
             {
                 return BadRequest("The giving business couldn't be edited" + th);
+            }
+        }
+
+        [HttpPut("status/{id}")]
+        public async Task<ActionResult<DeleteBusinessResultDto>> UpdateStatus(int id)
+        {
+            try
+            {
+                var _business = await this._context.Business.Where(x => x.Id == id && x.Status != (int)StatusEnum.delete).FirstOrDefaultAsync();
+                
+                if(_business.Status == (int)StatusEnum.enable) { _business.Status = (int)StatusEnum.disable; } else { _business.Status = (int)StatusEnum.enable; };
+                await this._context.SaveChangesAsync();
+
+                return new DeleteBusinessResultDto
+                {
+                    Status = true,
+                    Message = "The giving Business has been updated"
+                };
+            }
+            catch (System.Exception)
+            {
+                return new DeleteBusinessResultDto
+                {
+                    Status = false,
+                    Message = "The giving Business counldn't been updated"
+                };
             }
         }
     }

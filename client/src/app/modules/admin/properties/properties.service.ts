@@ -34,25 +34,16 @@ export class PropertiesService {
 
   createProperty(data: CreatePropertyDto): Observable<ResultPropertiesDto>
   {
-    return this._httpClient.post<ResultPropertiesDto>(environment.API_HOST + "api/properties/add", data).pipe(
-      tap((result) => {
-      })
-    );
+    return this._httpClient.post<ResultPropertiesDto>(environment.API_HOST + "api/properties/add", data);
   }
 
   updateProperty(data: UpdatePropertyDto): Observable<ResultPropertiesDto>
   {
-    return this._httpClient.put<ResultPropertiesDto>(environment.API_HOST + "api/properties/edit", data).pipe(
-      tap((result) => {
-      })
-    );
+    return this._httpClient.put<ResultPropertiesDto>(environment.API_HOST + "api/properties/edit", data);
   }
 
   deleteProperty(id: number): Observable<ResultDeleteProperties>
   {
-    return this._httpClient.delete<ResultDeleteProperties>(environment.API_HOST + "api/properties/delete/"+id).pipe(
-      tap((result) => {
-      })
-    );
+    return this._httpClient.delete<ResultDeleteProperties>(environment.API_HOST + "api/properties/delete/"+id);
   }
 }

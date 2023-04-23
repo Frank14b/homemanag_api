@@ -27,8 +27,8 @@ namespace API.Entities
 
         [Required]
         public string City {get; set;}
-        public string Lng {get; set;}
-        public string Lat {get; set;}
+        public float Lng {get; set;}
+        public float Lat {get; set;}
 
         [Required]
         public string slug {get; set;}
@@ -40,9 +40,11 @@ namespace API.Entities
         public int UserId {get; set;}
         public AppUser User {get; set;}
         public int PropertyTypeId {get; set;}
+        public int TypeMode {get; set;}
         public AppPropertyType PropertyType {get; set;}
         public DateTime CreatedAt {get; set;}
         public DateTime UpdatedAt {get; set;}
+        public string DataLocation {get; set;}
 
         public List<AppPropertyMedia> PropertyMedias {get; set;} = new();
         public List<AppPropertyMeta> PropertyMetas {get; set;} = new();

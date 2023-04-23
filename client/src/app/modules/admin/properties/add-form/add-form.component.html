@@ -9,8 +9,8 @@
             <mat-form-field appearance="fill" class="w-full">
                 <mat-label>Property Mode</mat-label>
                 <mat-select id="mode" [formControlName]="'mode'">
-                    <mat-option value="0">Parent Property</mat-option>
-                    <mat-option value="1">Sub Property</mat-option>
+                    <mat-option value=0>Parent Property</mat-option>
+                    <mat-option value=1>Sub Property</mat-option>
                 </mat-select>
             </mat-form-field>
 
@@ -20,6 +20,15 @@
                 <mat-error *ngIf="propertyDataForm.get('name').hasError('required')">
                     Name is required
                 </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Business</mat-label>
+                <mat-select id="businessId" [formControlName]="'businessId'">
+                    <mat-option value="0"></mat-option>
+                    <mat-option *ngFor="let business of userBusiness" [value]="business.id">{{
+                        business.name }}</mat-option>
+                </mat-select>
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="w-full">
@@ -43,8 +52,8 @@
                     <mat-label>Country</mat-label>
                     <mat-select id="country" [formControlName]="'country'">
                         <mat-option value="0"></mat-option>
-                        <mat-option *ngFor="let country of allCountries" [value]="country?.name?.common">{{
-                            country?.name?.common }}</mat-option>
+                        <mat-option *ngFor="let country of allCountries" [value]="country?.name?.common">
+                            {{ country?.flag }} {{ country?.name?.common }}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="fill" class="w-full">

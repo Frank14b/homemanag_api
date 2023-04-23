@@ -66,10 +66,21 @@
     </mat-dialog-content>
 
     <mat-dialog-actions align="end">
-        <button mat-button mat-dialog-close>Cancel</button>
-        <button mat-button *ngIf="!isUpdate" (click)="createType()" cdkFocusInitial [disabled]="isLoading">Save
+        <button mat-button mat-dialog-close class="bg-red">Cancel</button>
+
+        <button mat-button *ngIf="isUpdate && data.defaultBusiness.status == false" (click)="updateStatus()" [disabled]="isLoading">
+            Enable &nbsp; 
+            <mat-icon class="text-green-400 icon-size-5 mx-8" [svgIcon]="'heroicons_solid:check'"></mat-icon>
+        </button>
+
+        <button mat-button *ngIf="isUpdate && data.defaultBusiness.status == true" (click)="updateStatus()" [disabled]="isLoading">
+            Disable &nbsp; 
+            <mat-icon class="text-red-400 icon-size-5 mx-8" [svgIcon]="'heroicons_solid:x'"></mat-icon>
+        </button>
+
+        <button mat-button *ngIf="!isUpdate" (click)="createBusiness()" cdkFocusInitial [disabled]="isLoading">Save
             New</button>
-        <button mat-button *ngIf="isUpdate" (click)="updateType()" cdkFocusInitial [disabled]="isLoading">Save
+        <button mat-button *ngIf="isUpdate" (click)="updateBusiness()" cdkFocusInitial [disabled]="isLoading">Save
             Update</button>
     </mat-dialog-actions>
 </form>
