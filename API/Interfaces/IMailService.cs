@@ -1,0 +1,9 @@
+using API.DTOs.Emails;
+
+namespace API.Interfaces
+{
+    public interface IMailService
+    {
+        Task SendEmailAsync(EmailRequestDto mailRequest);
+    }
+}

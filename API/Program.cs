@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using API.Data;
+using API.DTOs.Emails;
 using API.Interfaces;
 using API.Middleware;
 using API.Services;
@@ -28,6 +29,10 @@ builder.Services.AddCors();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+
+builder.Services.AddTransient<IMailService, MailService>();
 
 builder.Services.AddAuthentication().AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, Options =>
 {
