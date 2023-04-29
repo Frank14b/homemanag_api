@@ -1,8 +1,10 @@
+using System;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using API.Commons;
 using API.Data;
+using API.DTOs.Emails;
 using API.Entities;
 using API.Interfaces;
 using API.UsersDTOs;
@@ -20,16 +22,18 @@ namespace API.Controllers
         private readonly DataContext _context;
         private readonly ITokenService _tokenService;
         private UsersCommon _userCommon;
+        private EmailsCommon _emailsCommon;
         private IMapper _mapper;
         private IConfiguration _configuration;
 
-        public UsersController(DataContext context, ITokenService tokenService, IMapper mapper, IConfiguration configuration)
+        public UsersController(DataContext context, ITokenService tokenService, IMapper mapper, IConfiguration configuration, IMailService mailService)
         {
             this._context = context;
             this._tokenService = tokenService;
             this._mapper = mapper;
             this._userCommon = new UsersCommon(context);
             this._configuration = configuration;
+            this._emailsCommon = new EmailsCommon(mailService);
         }
 
         [HttpGet("getall")]
@@ -137,6 +141,23 @@ namespace API.Controllers
                 var finalresult1 = this._mapper.Map<ResultloginDto>(result);
 
                 if(result.Status == (int)StatusEnum.disable) return Ok("Your account is disabled. Please Contact the admin");
+
+                var data_email = new EmailRequestDto{
+                    ToEmail = result.Email,
+                    ToName = result.FirstName, 
+                    SubTitle = "Login Attempts",
+                    ReplyToEmail = "",
+                    Subject = "Test Email Sender",
+                    Body = "<div> <p>Dear </p>" + result.FirstName + ",</p><br/>"
+                           +"<p>We are pleased to inform you that you have successfully logged in to your account on "+DateTime.UtcNow
+                           +" GMT from .This email is to confirm that the login was authorized by you to access your account.</p>"
+                           +"<br/> <p>If you did not authorize this login, please contact us immediately at support.auth@homemanag.net"
+                           +" We take the security of your account very seriously and will investigate any suspicious activity.</p>"
+                           +"<br/><p>Thank you for choosing our services.</p>"
+                           +"</div>",
+                    Attachments = {}
+                };
+                await this._emailsCommon.SendMail(data_email);
 
                 finalresult1.Token = this._tokenService.CreateToken(result);
 

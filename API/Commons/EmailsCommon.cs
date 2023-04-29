@@ -19,11 +19,10 @@ namespace API.Commons
                 await mailService.SendEmailAsync(request);
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
-
         }
     }
 }
