@@ -2,8 +2,10 @@ using System.Net;
 using System.Security.Claims;
 using API.Commons;
 using API.Data;
+using API.DTOs.Emails;
 using API.DTOs.Properties;
 using API.Entities;
+using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,11 +20,13 @@ namespace API.Controllers
         private DataContext _context;
         private IMapper _mapper;
         private PropertiesCommon _propertiesCommon;
-        public PropertiesController(DataContext context, IMapper mapper)
+        private EmailsCommon _emailsCommons;
+        public PropertiesController(DataContext context, IMapper mapper, IMailService mailService)
         {
             this._context = context;
             this._mapper = mapper;
             this._propertiesCommon = new PropertiesCommon(context);
+            this._emailsCommons = new EmailsCommon(mailService);
         }
 
         [HttpPost("add")]
@@ -33,7 +37,7 @@ namespace API.Controllers
                 ClaimsPrincipal currentUser = this.User;
                 var userId = Int32.Parse(currentUser.FindFirst(ClaimTypes.NameIdentifier).Value);
                 
-                var _property = this._mapper.Map<AppProperty>(data);
+                AppProperty _property = this._mapper.Map<AppProperty>(data);
 
                 _property.UserId = userId;
                 _property.Status = (int)StatusEnum.enable;
@@ -47,7 +51,23 @@ namespace API.Controllers
 
                 await this._context.SaveChangesAsync();
 
-                return this._mapper.Map<PropertiesResultListDto>(_property);
+                PropertiesResultListDto result = this._mapper.Map<PropertiesResultListDto>(_property);
+
+                AppUser userData = await this._context.Users.Where((x) => x.Id == userId).FirstOrDefaultAsync();
+
+                var data_email = new EmailRequestDto
+                {
+                    ToEmail = userData.Email,
+                    ToName = userData.FirstName,
+                    SubTitle = "Confirmation of Property Creation",
+                    ReplyToEmail = "",
+                    Subject = "Confirmation of Property Creation",
+                    Body = this._emailsCommons.PropertyCreate(result),
+                    Attachments = { }
+                };
+                await this._emailsCommons.SendMail(data_email);
+
+                return result;
             }
             catch (System.Exception th)
             {

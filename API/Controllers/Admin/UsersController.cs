@@ -84,7 +84,6 @@ namespace API.Controllers.Admin
             }
         }
 
-        [AllowAnonymous]
         [HttpPost("add")]
         public async Task<ActionResult<AppUser>> RegisterUsers(RegisterDto data)
         {

@@ -115,31 +115,31 @@
 
                 <!-- Single sign-on buttons -->
                 <div class="flex items-center mt-8 space-x-4">
-                    <button
+                    <!-- <button
                         class="flex-auto"
                         type="button"
                         mat-stroked-button>
                         <mat-icon
                             class="icon-size-5"
                             [svgIcon]="'feather:facebook'"></mat-icon>
-                    </button>
+                    </button> -->
                     <button
-                        id="g_id_onload"
+                        (click)="signInWithFaceRecognition()"
                         class="flex-auto"
                         type="button"
                         mat-stroked-button>
                         <mat-icon
                             class="icon-size-5"
-                            [svgIcon]="'feather:twitter'"></mat-icon>
+                            [svgIcon]="'feather:video'"></mat-icon>
                     </button>
-                    <button
+                    <!-- <button
                         class="flex-auto"
                         type="button"
                         mat-stroked-button>
                         <mat-icon
                             class="icon-size-5"
                             [svgIcon]="'feather:github'"></mat-icon>
-                    </button>
+                    </button> -->
                 </div>
             </form>
         </div>
@@ -172,7 +172,7 @@
                 <div>our community</div>
             </div>
             <div class="mt-6 text-lg tracking-tight leading-6 text-gray-400">
-                Fuse helps developers to build organized and well coded dashboards full of beautiful and rich modules.
+                HomeManag helps developers to build organized and well coded dashboards full of beautiful and rich modules.
                 Join us and start building your application today.
             </div>
             <div class="flex items-center mt-8">
