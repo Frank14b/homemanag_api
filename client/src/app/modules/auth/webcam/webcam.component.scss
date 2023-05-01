@@ -1,0 +1,10 @@
+.video-container {
+    position: relative;
+}
+
+#canvas {
+    position: absolute !important; 
+    top: 50% !important; 
+    left: 27% !important; 
+    transform:translate(-50%, -50%) !important;
+}

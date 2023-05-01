@@ -2,7 +2,9 @@ using System.Security.Claims;
 using API.Commons;
 using API.Data;
 using API.DTOs.Business;
+using API.DTOs.Emails;
 using API.Entities;
+using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,12 +21,15 @@ namespace API.Controllers
         private BusinessCommon _businessCommon;
         private UsersCommon _userCommon;
 
-        public BusinessController(DataContext context, IMapper mapper)
+        private EmailsCommon _emailsCommons;
+
+        public BusinessController(DataContext context, IMapper mapper, IMailService mailService)
         {
             this._context = context;
             this._mapper = mapper;
             this._businessCommon = new BusinessCommon(context);
             this._userCommon = new UsersCommon(context);
+            this._emailsCommons = new EmailsCommon(mailService);
         }
 
         [HttpPost("add")]
@@ -48,6 +53,20 @@ namespace API.Controllers
                 await this._context.SaveChangesAsync();
 
                 var result = this._mapper.Map<BusinessResultListDto>(_business);
+
+                AppUser userData = await this._context.Users.Where((x) => x.Id == userid).FirstOrDefaultAsync();
+
+                var data_email = new EmailRequestDto
+                {
+                    ToEmail = userData.Email,
+                    ToName = userData.FirstName,
+                    SubTitle = "Confirmation of Business Creation",
+                    ReplyToEmail = "",
+                    Subject = "Confirmation of Business Creation",
+                    Body = this._emailsCommons.BusinessCreate(result),
+                    Attachments = { }
+                };
+                await this._emailsCommons.SendMail(data_email);
 
                 return result;
             }

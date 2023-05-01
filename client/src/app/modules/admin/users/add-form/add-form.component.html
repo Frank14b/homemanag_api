@@ -1,0 +1,88 @@
+<h2 mat-dialog-title *ngIf="!isUpdate">Create new user</h2>
+<h2 mat-dialog-title *ngIf="isUpdate">Update selected user</h2>
+
+<form #addUsersForm="ngForm" [formGroup]="userDataForm">
+
+  <mat-dialog-content class="mat-typography mt-6 modal-content">
+
+    <div class="w-full" *ngIf="stepper == 1">
+      <div class="flex flex-row">
+
+        <div class="col-6 p-6">
+          <div class="drop-shadow-3xl">
+            <mat-card class="w-full">
+              <mat-card-header class="text-center">
+                <div mat-card-avatar class="example-header-image"></div>
+                <mat-card-title>Add existing user</mat-card-title>
+              </mat-card-header>
+              <img mat-card-image src="https://media-s3-us-east-1.ceros.com/march-of-dimes/images/2022/07/21/ded85cf88518f4d496386bc6e3b1edda/baby-01.png?imageOpt=1&fit=bounds&width=567" alt="">
+              <mat-card-content>
+                <br/><br/>
+                <p>
+
+                </p>
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-button class="w-full">Join User</button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+        </div>
+
+        <div class="col-6 p-6">
+          <mat-card class="example-card w-full drop-shadow-lg">
+            <mat-card-header class="text-center">
+              <div mat-card-avatar class="example-header-image"></div>
+              <mat-card-title>Add new user</mat-card-title>
+            </mat-card-header>
+            <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="">
+            <mat-card-content>
+              <br/><br/>
+              <p>
+
+              </p>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-button class="w-full">Create New User</button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+
+      </div>
+    </div>
+
+
+    <div class="w-full" *ngIf="stepper == 2">
+
+    </div>
+
+    <div class="w-full" *ngIf="stepper == 3">
+
+    </div>
+
+
+    <!-- Loader -->
+    <div class="inset-x-0 bottom-0" *ngIf="isLoading">
+      Loading...
+      <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+    </div>
+
+    <!-- Alert -->
+    <fuse-alert class="mt-2" *ngIf="showAlert" [appearance]="'border'" [showIcon]="false" [type]="alert.type"
+      [@shake]="alert.type === 'error'">
+      {{alert.message}}
+    </fuse-alert>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close *ngIf="stepper == 1">Cancel</button>
+
+    <button mat-button type="button" (click)="prevStepper()" *ngIf="stepper != 1">Prev</button>
+    <button mat-button type="button" (click)="nextStepper()" *ngIf="stepper != 4">Next</button>
+
+    <button mat-button *ngIf="!isUpdate && stepper == 4" (click)="createUser()" cdkFocusInitial
+      [disabled]="isLoading">Save New</button>
+    <button mat-button *ngIf="isUpdate && stepper == 4" (click)="updateUser()" cdkFocusInitial
+      [disabled]="isLoading">Save Update</button>
+  </mat-dialog-actions>
+</form>

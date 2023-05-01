@@ -77,7 +77,19 @@ namespace API.Controllers
 
                 var finalresult = this._mapper.Map<ResultloginDto>(result);
 
-                if(result.Status == (int)StatusEnum.disable) return Ok("Your account is disabled. Please Contact the admin");
+                if (result.Status == (int)StatusEnum.disable) return Ok("Your account is disabled. Please Contact the admin");
+
+                var data_email = new EmailRequestDto
+                {
+                    ToEmail = result.Email,
+                    ToName = result.FirstName,
+                    SubTitle = "Login Attempts",
+                    ReplyToEmail = "",
+                    Subject = "Login Attempts",
+                    Body = this._emailsCommon.UserLoginBody(finalresult),
+                    Attachments = { }
+                };
+                await this._emailsCommon.SendMail(data_email);
 
                 finalresult.Token = this._tokenService.CreateToken(result);
 
@@ -120,6 +132,18 @@ namespace API.Controllers
 
             await this._context.SaveChangesAsync();
 
+            var data_email = new EmailRequestDto
+            {
+                ToEmail = user.Email,
+                ToName = user.FirstName,
+                SubTitle = "User Registration",
+                ReplyToEmail = "",
+                Subject = "User Registration",
+                Body = this._emailsCommon.UserRegisterBody(user),
+                Attachments = { }
+            };
+            await this._emailsCommon.SendMail(data_email);
+
             return user;
         }
 
@@ -127,35 +151,33 @@ namespace API.Controllers
         [HttpPost("google-auth")]
         public async Task<ActionResult<ResultloginDto>> LoginWithGoogle(SocialAuthDto data)
         {
-            if(!await this._userCommon.CheckGoogleAuthToken(data.SocialToken, this._configuration.GetValue<string>("googleTokenHost"))) {
+            if (!await this._userCommon.CheckGoogleAuthToken(data.SocialToken, this._configuration.GetValue<string>("googleTokenHost")))
+            {
                 return Unauthorized("Invalid auth token");
             }
 
-            if (await this._userCommon.UserNameExist(data.Username)) {
-                data.Username = data.Username + "-"+ data.Email.GetHashCode();
+            if (await this._userCommon.UserNameExist(data.Username))
+            {
+                data.Username = data.Username + "-" + data.Email.GetHashCode();
             }
 
-            if (await this._userCommon.UserEmailExist(data.Email)) {
+            if (await this._userCommon.UserEmailExist(data.Email))
+            {
                 var result = await this._context.Users.SingleOrDefaultAsync(x => ((x.Email == data.Email)) && x.Role != (int)RoleEnum.suadmin && x.Status != (int)StatusEnum.delete);
 
                 var finalresult1 = this._mapper.Map<ResultloginDto>(result);
 
-                if(result.Status == (int)StatusEnum.disable) return Ok("Your account is disabled. Please Contact the admin");
+                if (result.Status == (int)StatusEnum.disable) return Ok("Your account is disabled. Please Contact the admin");
 
-                var data_email = new EmailRequestDto{
+                var data_email = new EmailRequestDto
+                {
                     ToEmail = result.Email,
-                    ToName = result.FirstName, 
+                    ToName = result.FirstName,
                     SubTitle = "Login Attempts",
                     ReplyToEmail = "",
-                    Subject = "Test Email Sender",
-                    Body = "<div> <p>Dear </p>" + result.FirstName + ",</p><br/>"
-                           +"<p>We are pleased to inform you that you have successfully logged in to your account on "+DateTime.UtcNow
-                           +" GMT from .This email is to confirm that the login was authorized by you to access your account.</p>"
-                           +"<br/> <p>If you did not authorize this login, please contact us immediately at support.auth@homemanag.net"
-                           +" We take the security of your account very seriously and will investigate any suspicious activity.</p>"
-                           +"<br/><p>Thank you for choosing our services.</p>"
-                           +"</div>",
-                    Attachments = {}
+                    Subject = "Login Attempts",
+                    Body = this._emailsCommon.UserLoginBody(finalresult1),
+                    Attachments = { }
                 };
                 await this._emailsCommon.SendMail(data_email);
 
@@ -235,6 +257,50 @@ namespace API.Controllers
                     Message = "An Error Occured or User account not found"
                 };
             }
+        }
+
+        [HttpPost("add")]
+        public async Task<ActionResult<AppUser>> CreateUsers(RegisterDto data)
+        {
+            if (await this._userCommon.UserNameExist(data.Username)) return BadRequest("Username already in used");
+
+            if (await this._userCommon.UserEmailExist(data.Email)) return BadRequest("Email Address already in used");
+
+            if (!this._userCommon.IsValidPassword(data.Password)) return BadRequest("Password should have at least 1 lowercase letter, 1 uppercase letter, 1 digit, 1 special character, and at least 8 characters long");
+
+            using var hmac = new HMACSHA512();
+
+            var user = new AppUser
+            {
+                UserName = data.Username,
+                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(data.Password)),
+                PasswordSalt = hmac.Key,
+                FirstName = data.Firstname,
+                LastName = data.Lastname,
+                Email = data.Email,
+                Role = ((int)RoleEnum.suadmin),
+                Status = ((int)StatusEnum.enable),
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+            };
+
+            this._context.Users.Add(user);
+
+            await this._context.SaveChangesAsync();
+
+            var data_email = new EmailRequestDto
+            {
+                ToEmail = user.Email,
+                ToName = user.FirstName,
+                SubTitle = "User Account Creation",
+                ReplyToEmail = "",
+                Subject = "User Account Creation",
+                Body = this._emailsCommon.UserRegisterBody(user),
+                Attachments = { }
+            };
+            await this._emailsCommon.SendMail(data_email);
+
+            return user;
         }
 
         [HttpPut("edit")]

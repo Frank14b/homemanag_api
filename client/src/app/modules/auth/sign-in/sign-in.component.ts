@@ -160,4 +160,9 @@ export class AuthSignInComponent implements OnInit
     {
         this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
     }
+
+    signInWithFaceRecognition()
+    {
+        this._router.navigateByUrl("/cam-sign-in");
+    }
 }

@@ -39,14 +39,19 @@
                     matSortDisableClear matSortDirection="desc">
                     <!-- Number Column -->
                     <ng-container matColumnDef="id">
-                        <th mat-header-cell *matHeaderCellDef>#</th>
-                        <td mat-cell *matCellDef="let row">{{row.id}}</td>
+                        <th mat-header-cell *matHeaderCellDef>Country</th>
+                        <td mat-cell *matCellDef="let row">{{getCountryFlag(row.country) +" "+ row.country}}</td>
                     </ng-container>
 
                     <!-- Title Column -->
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef>Name</th>
-                        <td mat-cell *matCellDef="let row">{{row.name}}</td>
+                        <td mat-cell *matCellDef="let row">{{row.name}} 
+                            <br/> 
+                            <small class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{row.email}}</small>
+                            <!-- <br/> -->
+                            <small class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">+{{row.countryCode+ " " +row.phoneNumber}}</small>
+                        </td>
                     </ng-container>
 
                     <!-- Title Column -->

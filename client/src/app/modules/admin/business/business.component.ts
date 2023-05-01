@@ -9,6 +9,7 @@ import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { ResultBusinessDto, ResultBusinessListDto, ResultDeleteDto } from './business.types';
 import { BusinessService } from './business.service';
 import { AddFormComponent } from './add-form/add-form.component';
+import { appCountries } from 'app/core/utils/app.countries';
 
 @Component({
   selector: 'app-business',
@@ -19,6 +20,7 @@ export class BusinessComponent {
   searchInputControl: UntypedFormControl = new UntypedFormControl();
   isLoading: boolean = false;
   allBusiness: ResultBusinessDto;
+  allCountries = appCountries;
 
   displayedColumns: string[] = ['id', 'description', 'name', 'status', 'createdAt', 'action'];
 
@@ -147,6 +149,11 @@ export class BusinessComponent {
         }
       }
     )
+  }
+
+  getCountryFlag(country: string)
+  {
+     return this.allCountries.find((x) => x.name.common == country)?.flag
   }
 }
 
