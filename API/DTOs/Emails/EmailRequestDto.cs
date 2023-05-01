@@ -4,6 +4,7 @@ namespace API.DTOs.Emails
     {
         public string ToEmail { get; set; }
         public string ToName { get; set; }
+        public string SubTitle {get; set;}
         public string ReplyToEmail { get; set; }
         public string Subject { get; set; }
         public string Body { get; set; }
