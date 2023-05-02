@@ -42,8 +42,8 @@ namespace API.Controllers
                 _property.UserId = userId;
                 _property.Status = (int)StatusEnum.enable;
                 _property.CreatedAt = DateTime.Now;
-                _property.Reference = userId +"-"+ _property.Name.GetHashCode();
-                _property.slug = _property.Name.Replace(" ", "-") +"-"+ _property.Reference.GetHashCode();
+                _property.Reference = userId +"-"+ Math.Abs(_property.Name.GetHashCode());
+                _property.slug = _property.Name.Replace(" ", "-") +"-"+ Math.Abs(_property.Reference.GetHashCode());
 
                 // if(await this._propertiesCommon.PropertyExist(_property.Reference)) return BadRequest("The Specified Name already exist");
 

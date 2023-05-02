@@ -41,7 +41,7 @@ namespace API.Controllers
                 var userid = Int32.Parse(currentUser.FindFirst(ClaimTypes.NameIdentifier).Value);
 
                 var _business = this._mapper.Map<AppBusiness>(data);
-                _business.Reference = _business.Name.GetHashCode()+"_"+userid;
+                _business.Reference = Math.Abs(_business.Name.GetHashCode())+"_"+userid;
                 _business.UserId = userid;
                 _business.Status = (int)StatusEnum.enable;
                 _business.CreatedAt = DateTime.UtcNow;

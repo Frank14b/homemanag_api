@@ -14,10 +14,5 @@ namespace API.Controllers
 
             // this._context = context;
         }
-
-        public string RemoveSpecialChars(string input)
-        {
-            return input; //Regex.Replace(input, @"[^0-9a-zA-Z\._]", string.Empty);
-        }
     }
 }

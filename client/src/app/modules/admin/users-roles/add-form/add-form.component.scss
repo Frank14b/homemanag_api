@@ -1,0 +1,15 @@
+.modal-content {
+    width: 1000px;
+}
+
+@media screen and (max-width: 1200px) {
+    .modal-content {
+        min-width: 600px;
+        max-width: 600px;
+    }
+}
+
+.example-header-image {
+    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+    background-size: cover;
+}

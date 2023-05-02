@@ -2,6 +2,7 @@ using System;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using API.Commons;
 using API.Data;
 using API.DTOs.Emails;
@@ -402,7 +403,7 @@ namespace API.Controllers
         {
             try
             { 
-                keyword = this.RemoveSpecialChars(keyword);
+                keyword = Regex.Replace(keyword, @"[^0-9a-zA-Z\._]", string.Empty);
                 var _user = await this._context.Users.Where((x) => x.Email == keyword && x.Status == (int)StatusEnum.enable && x.Role == (int)RoleEnum.user).FirstOrDefaultAsync();
 
                 if(_user != null) {
