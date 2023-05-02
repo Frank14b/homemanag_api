@@ -1,0 +1,146 @@
+<!-- <h2 mat-dialog-title *ngIf="!isUpdate">Create new user</h2>
+<h2 mat-dialog-title *ngIf="isUpdate">Update selected user</h2> -->
+
+<form #addUsersForm="ngForm" [formGroup]="userDataForm">
+
+  <mat-dialog-content class="mat-typography mt-6 modal-content">
+
+    <div class="w-full">
+      <mat-tab-group>
+        <mat-tab label="Join Existing User">
+
+          <form class="mt-8" [formGroup]="searchUserDataForm" #searchUserNgForm="ngForm">
+            <mat-form-field appearance="fill" class="w-full">
+              <mat-label>User email address or ID</mat-label>
+              <input placeholder="User email address or ID" matInput id="keyword" [formControlName]="'keyword'">
+              <mat-error *ngIf="searchUserDataForm.get('keyword').hasError('required')">
+                This field is required
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Loader -->
+            <div class="inset-x-0 bottom-0" *ngIf="isLoading">
+              Searching...
+              <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+            </div>
+
+            <!-- Alert -->
+            <fuse-alert class="mt-2" *ngIf="showAlert" [appearance]="'border'" [showIcon]="false" [type]="alert.type"
+              [@shake]="alert.type === 'error'">
+              {{alert.message}}
+            </fuse-alert>
+
+            <mat-card class="example-card" *ngIf="searchingUser">
+              <mat-card-header>
+                <div mat-card-avatar class="example-header-image"></div>
+                <mat-card-title> {{searchingUser?.userName}} </mat-card-title>
+                <mat-card-subtitle> {{searchingUser?.email}} </mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-actions>
+                <button mat-button>Add this user</button>
+              </mat-card-actions>
+            </mat-card>
+
+            <button class="fuse-mat-button-large w-full mt-6" mat-flat-button [color]="'primary'" (click)="searchUser()"
+              [disabled]="isLoading">
+              Search User
+            </button>
+          </form>
+
+        </mat-tab>
+
+        <mat-tab label="Create New User">
+
+          <!-- Alert -->
+          <fuse-alert class="mt-8" *ngIf="showAlert" [appearance]="'outline'" [showIcon]="false" [type]="alert.type"
+            [@shake]="alert.type === 'error'">
+            {{alert.message}}
+          </fuse-alert>
+
+          <!-- Sign Up form -->
+          <form class="mt-8" [formGroup]="userDataForm" #signUpNgForm="ngForm">
+
+            <!-- Name field -->
+            <mat-form-field class="w-full">
+              <mat-label>Username</mat-label>
+              <input id="username" matInput [formControlName]="'username'">
+              <mat-error *ngIf="userDataForm.get('username').hasError('required')">
+                Username is required
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Email field -->
+            <mat-form-field class="w-full">
+              <mat-label>Email address</mat-label>
+              <input id="email" matInput [formControlName]="'email'">
+              <mat-error *ngIf="userDataForm.get('email').hasError('required')">
+                Email address is required
+              </mat-error>
+              <mat-error *ngIf="userDataForm.get('email').hasError('email')">
+                Please enter a valid email address
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Fistname field -->
+            <mat-form-field class="w-full">
+              <mat-label>Firstname</mat-label>
+              <input id="firstname" matInput [formControlName]="'firstname'">
+              <mat-error *ngIf="userDataForm.get('firstname').hasError('required')">
+                Firstname is required
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Fistname field -->
+            <mat-form-field class="w-full">
+              <mat-label>Lastname</mat-label>
+              <input id="lastname" matInput [formControlName]="'lastname'">
+              <mat-error *ngIf="userDataForm.get('lastname').hasError('required')">
+                Lastname is required
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Password field -->
+            <mat-form-field class="w-full">
+              <mat-label>Password</mat-label>
+              <input id="password" matInput type="password" [formControlName]="'password'" #passwordField>
+              <button mat-icon-button type="button"
+                (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
+                matSuffix>
+                <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'password'"
+                  [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'text'"
+                  [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
+              </button>
+              <mat-error>
+                Password required (Uppercase, LowerCase, Number, Special Character) >= 8 length
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Loader -->
+            <div class="inset-x-0 bottom-0" *ngIf="isLoading">
+              Saving...
+              <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+            </div>
+
+            <!-- Submit button -->
+            <button class="fuse-mat-button-large w-full mt-6" mat-flat-button [color]="'primary'"
+              [disabled]="userDataForm.disabled" (click)="createUser()">
+              <span *ngIf="!userDataForm.disabled">
+                Create user account
+              </span>
+              <mat-progress-spinner *ngIf="userDataForm.disabled" [diameter]="24"
+                [mode]="'indeterminate'"></mat-progress-spinner>
+            </button>
+
+          </form>
+
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close *ngIf="stepper == 1">Cancel</button>
+  </mat-dialog-actions>
+</form>

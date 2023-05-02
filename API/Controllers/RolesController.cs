@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using API.Commons;
 using API.Data;
 using API.DTOs.Roles;
@@ -37,7 +38,7 @@ namespace API.Controllers
 
                 var _role = this._mapper.Map<AppRole>(data);
 
-                _role.Code = data.Title.GetHashCode()+"$"+data.BusinessId;
+                _role.Code = Math.Abs(data.Title.GetHashCode())+"$"+data.BusinessId;
                 _role.Business = this._businessCommon.GetBusinessById(data.BusinessId);
                 _role.Status = (int)StatusEnum.enable;
 
@@ -52,6 +53,37 @@ namespace API.Controllers
             catch (System.Exception)
             {
                 return BadRequest("An error occured. Role can't be created");
+            }
+        }
+
+        [HttpGet("getall")]
+        public async Task<ActionResult<IEnumerable<RoleResultDtos>>> GetAllRoles(int skip = 0, int limit = 0, string sort = "asc")
+        {
+            try
+            {
+                ClaimsPrincipal currentUser = this.User;
+                var userId = Int32.Parse(currentUser.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+                var userBusiness = this._businessCommon.GetUserBusiness(userId);
+
+                var query = this._context.Roles.Where(x => x.Status != (int)StatusEnum.delete && userBusiness.Contains(x.BusinessId));
+
+                if (sort == "desc")
+                {
+                    var _result = await query.OrderByDescending(x => x.CreatedAt).Skip(skip).Take(limit).ToListAsync();
+                    var result = this._mapper.Map<IEnumerable<RoleResultDtos>>(_result);
+                    return Ok(result);
+                }
+                else
+                {
+                    var _result = await query.OrderBy(x => x.CreatedAt).Skip(skip).Take(limit).ToListAsync();
+                    var result = this._mapper.Map<IEnumerable<RoleResultDtos>>(_result);
+                    return Ok(result);
+                }
+            }
+            catch (System.Exception)
+            {
+                return BadRequest("An error occured. Please retry later");
             }
         }
         
