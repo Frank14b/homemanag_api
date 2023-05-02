@@ -56,4 +56,13 @@ export class UsersService {
       })
     );
   }
+
+  searchUserByEmailOrUniqueId(keyword: string): Observable<ResultUsersListDto>
+  {
+    return this._httpClient.get<ResultUsersListDto>(environment.API_HOST + `api/users/search-join?keyword=${keyword}`).pipe(
+      tap((result) => {
+      })
+    );
+  }
+
 }

@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -8,9 +9,15 @@ namespace API.Controllers
 
     public class BaseApiController : ControllerBase
     {
-        public BaseApiController() { 
+        public BaseApiController()
+        {
 
             // this._context = context;
+        }
+
+        public string RemoveSpecialChars(string input)
+        {
+            return input; //Regex.Replace(input, @"[^0-9a-zA-Z\._]", string.Empty);
         }
     }
 }

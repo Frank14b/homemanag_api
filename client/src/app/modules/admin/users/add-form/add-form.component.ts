@@ -14,13 +14,15 @@ import { CreateUserDto, ResultUsersListDto } from '../users.types';
 export class AddFormComponent implements OnInit {
 
   isLoading: boolean = false;
-  @ViewChild('addUsersForm') addUsersForm: NgForm;
+  @ViewChild('searchUserNgForm') searchUserNgForm: NgForm;
   userDataForm: UntypedFormGroup;
+  searchUserDataForm: UntypedFormGroup;
   showAlert: boolean = false;
   currentList: ResultUsersListDto;
   isUpdate = false;
   stepper = 1;
   isLoadingType: boolean = false;
+  searchingUser: ResultUsersListDto = null;
 
   alert: { type: FuseAlertType; message: string } = {
     type: 'success',
@@ -40,18 +42,17 @@ export class AddFormComponent implements OnInit {
   ngOnInit(): void {
     // Create the form
     this.userDataForm = this._formBuilder.group({
-      id: [0],
-      mode: [0, [Validators.required]],
-      name: ['', [Validators.required]],
-      address: ['', [Validators.required]],
-      country: ['', [Validators.required]],
-      city: ['', [Validators.required]],
-      shortDesc: ['n/a', [Validators.required]],
-      cityFilter: [''],
-      description: ['n/a'],
-      propertyTypeId: ["", [Validators.required]],
-      businessId: ['', [Validators.required]]
+      username: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.pattern("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")]],
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
+      agreements: ['', Validators.requiredTrue]
     });
+
+    this.searchUserDataForm = this._formBuilder.group({
+      keyword: ['', [Validators.required]]
+    })
 
     if (this.data.defaultUsers != null) {
       this.userDataForm.get("id").setValue(this.data.defaultUsers.id);
@@ -135,7 +136,7 @@ export class AddFormComponent implements OnInit {
           // Set the alert
         },
         (response) => {
-          console.log(response)
+          // console.log(response)
           // Set the alert
           this.alert = {
             type: 'error',
@@ -148,5 +149,31 @@ export class AddFormComponent implements OnInit {
         }
       );
   }
+
+  searchUser(): void {
+    if(this.searchUserDataForm.invalid) {
+      return;
+    }
+
+    this.isLoading = true;
+    this.searchingUser = null
+    this.showAlert = false;
+
+    this._users.searchUserByEmailOrUniqueId(this.searchUserDataForm.get("keyword").value).subscribe(
+      (result: ResultUsersListDto) => {
+        this.isLoading = false;
+        this.searchingUser = result;
+      },
+      (response) => {
+        this.alert = {
+          type: 'error',
+          message: response.error
+        };
+        this.isLoading = false;
+        this.showAlert = true;
+      }
+    )
+  }
+
 }
 

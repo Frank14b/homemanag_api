@@ -396,5 +396,25 @@ namespace API.Controllers
                 return BadRequest("An error occured or user not found");
             }
         }
+
+        [HttpGet("search-join")]
+        public async Task<ActionResult<AppUser>> SearchJoin(string keyword)
+        {
+            try
+            { 
+                keyword = this.RemoveSpecialChars(keyword);
+                var _user = await this._context.Users.Where((x) => x.Email == keyword && x.Status == (int)StatusEnum.enable && x.Role == (int)RoleEnum.user).FirstOrDefaultAsync();
+
+                if(_user != null) {
+                    return Ok(_user);
+                }else{
+                    return NotFound("user not found");
+                }
+            }
+            catch (System.Exception)
+            {
+                return BadRequest("An error occured or user not found");
+            }
+        }
     }
 }
