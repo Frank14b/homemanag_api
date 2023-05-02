@@ -20,6 +20,8 @@ import { FuseAlertModule } from '@fuse/components/alert';
 import { MatTableModule } from '@angular/material/table';
 import { SharedModule } from 'app/shared/shared.module';
 import { AddFormComponent } from './add-form/add-form.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatCardModule } from '@angular/material/card';
 
 const exampleRoutes: Route[] = [
   {
@@ -52,6 +54,8 @@ const exampleRoutes: Route[] = [
     MatDialogModule,
     FuseAlertModule,
     MatTableModule,
+    MatTabsModule,
+    MatCardModule,
     SharedModule
   ]
 })
