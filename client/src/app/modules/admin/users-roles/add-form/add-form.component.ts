@@ -45,6 +45,7 @@ export class AddFormComponent implements OnInit {
   ngOnInit(): void {
     // Create the form
     this.roleDataForm = this._formBuilder.group({
+      id: [0],
       title: ['', [Validators.required]],
       description: ['n/a', [Validators.required]],
       businessId: ["", [Validators.required]]

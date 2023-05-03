@@ -10,50 +10,60 @@
 
         <mat-tab label="Create New Role">
 
+          <!-- Name field -->
+          <mat-form-field class="w-full">
+            <mat-label>Role name</mat-label>
+            <input id="title" matInput [formControlName]="'title'">
+            <mat-error *ngIf="roleDataForm.get('title').hasError('required')">
+              Role name is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Business</mat-label>
+            <mat-select id="businessId" [formControlName]="'businessId'">
+              <mat-option value=""></mat-option>
+              <mat-option *ngFor="let business of userBusiness" [value]="business.id">{{
+                business.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Description</mat-label>
+            <textarea matInput id="description" [formControlName]="'description'"></textarea>
+          </mat-form-field>
+
+          <!-- Loader -->
+          <div class="inset-x-0 bottom-0" *ngIf="isLoading">
+            Saving...
+            <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+          </div>
+
           <!-- Alert -->
           <fuse-alert class="mt-8" *ngIf="showAlert" [appearance]="'outline'" [showIcon]="false" [type]="alert.type"
             [@shake]="alert.type === 'error'">
             {{alert.message}}
           </fuse-alert>
 
-            <!-- Name field -->
-            <mat-form-field class="w-full">
-              <mat-label>Role name</mat-label>
-              <input id="title" matInput [formControlName]="'title'">
-              <mat-error *ngIf="roleDataForm.get('title').hasError('required')">
-                Role name is required
-              </mat-error>
-            </mat-form-field>
 
-            <mat-form-field appearance="fill" class="w-full">
-              <mat-label>Business</mat-label>
-              <mat-select id="businessId" [formControlName]="'businessId'">
-                  <mat-option value=""></mat-option>
-                  <mat-option *ngFor="let business of userBusiness" [value]="business.id">{{
-                      business.name }}</mat-option>
-              </mat-select>
-          </mat-form-field>
+          <!-- Submit button -->
+          <button *ngIf="roleDataForm.get('id').value == 0" class="fuse-mat-button-large w-full mt-6" mat-flat-button
+            [color]="'primary'" [disabled]="roleDataForm.disabled" (click)="createRole()">
+            <span *ngIf="!roleDataForm.disabled">
+              Create user role
+            </span>
+            <mat-progress-spinner *ngIf="roleDataForm.disabled" [diameter]="24"
+              [mode]="'indeterminate'"></mat-progress-spinner>
+          </button>
 
-            <mat-form-field appearance="fill" class="w-full">
-              <mat-label>Description</mat-label>
-              <textarea matInput id="description" [formControlName]="'description'"></textarea>
-            </mat-form-field>
-
-            <!-- Loader -->
-            <div class="inset-x-0 bottom-0" *ngIf="isLoading">
-              Saving...
-              <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
-            </div>
-
-            <!-- Submit button -->
-            <button class="fuse-mat-button-large w-full mt-6" mat-flat-button [color]="'primary'"
-              [disabled]="roleDataForm.disabled" (click)="createRole()">
-              <span *ngIf="!roleDataForm.disabled">
-                Create user role
-              </span>
-              <mat-progress-spinner *ngIf="roleDataForm.disabled" [diameter]="24"
-                [mode]="'indeterminate'"></mat-progress-spinner>
-            </button>
+          <button *ngIf="roleDataForm.get('id').value > 0" class="fuse-mat-button-large w-full mt-6" mat-flat-button
+            [color]="'primary'" [disabled]="roleDataForm.disabled" (click)="updateRole()">
+            <span *ngIf="!roleDataForm.disabled">
+              Update user role
+            </span>
+            <mat-progress-spinner *ngIf="roleDataForm.disabled" [diameter]="24"
+              [mode]="'indeterminate'"></mat-progress-spinner>
+          </button>
 
         </mat-tab>
       </mat-tab-group>

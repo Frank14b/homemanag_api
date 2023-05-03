@@ -43,7 +43,7 @@ export class RolesService {
 
   updateRole(data: UpdateRoleDto): Observable<ResultRolesListDto>
   {
-    return this._httpClient.put<ResultRolesListDto>(environment.API_HOST + "api/roles/edit", data).pipe(
+    return this._httpClient.put<ResultRolesListDto>(environment.API_HOST + "api/roles/edit/"+data.id, data).pipe(
       tap((result) => {
       })
     );
