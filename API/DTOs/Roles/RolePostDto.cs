@@ -23,6 +23,9 @@ namespace API.DTOs.Roles
         public string Title {get; set;}
 
         public string Description {get; set;}
+        
+        [Required]
+        public int BusinessId {get; set;}
 
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }

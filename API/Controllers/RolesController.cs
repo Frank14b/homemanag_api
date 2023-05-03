@@ -126,12 +126,12 @@ namespace API.Controllers
             }
         }
 
-        [HttpDelete("delete")]
-        public async Task<ActionResult<DeleteRoleResultDto>> DeleteRoles(DeleteRolesDto data)
+        [HttpDelete("delete/{id}")]
+        public async Task<ActionResult<DeleteRoleResultDto>> DeleteRoles(int id)
         {
             try
             {
-                var _access = await this._context.Roles.Where(x => x.Id == data.Id && x.Status == (int)StatusEnum.enable).FirstOrDefaultAsync();
+                var _access = await this._context.Roles.Where(x => x.Id == id && x.Status != (int)StatusEnum.delete).FirstOrDefaultAsync();
                 _access.Status = (int)StatusEnum.delete;
                 await this._context.SaveChangesAsync();
 
@@ -151,14 +151,15 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("update")]
-        public async Task<ActionResult<RoleResultDtos>> UpdateRoles(UpdateRolesDto data)
+        [HttpPut("edit/{id}")]
+        public async Task<ActionResult<RoleResultDtos>> UpdateRoles(int id, UpdateRolesDto data)
         {
             try
             {
-                var _role = await this._context.Roles.Where(x => x.Id == data.Id && x.Status != (int)StatusEnum.delete).Include("Busines").FirstOrDefaultAsync();
+                var _role = await this._context.Roles.Where(x => x.Id == id && x.Status != (int)StatusEnum.delete).FirstOrDefaultAsync();
 
                 _role.Title = (data.Title != null) ? data.Title : _role.Title;
+                _role.BusinessId = data.BusinessId;
                 _role.Description = (data.Description != null) ? data.Description : _role.Description;
                 _role.Status = (int)StatusEnum.enable;
 
