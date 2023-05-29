@@ -105,7 +105,7 @@ namespace API.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<ActionResult<AppUser>> RegisterUsers(RegisterDto data)
+        public async Task<ActionResult<ResultloginDto>> RegisterUsers(RegisterDto data)
         {
             if (await this._userCommon.UserNameExist(data.Username)) return BadRequest("Username already in used");
 
@@ -133,6 +133,8 @@ namespace API.Controllers
 
             await this._context.SaveChangesAsync();
 
+            var finalresult = this._mapper.Map<ResultloginDto>(user);
+
             var data_email = new EmailRequestDto
             {
                 ToEmail = user.Email,
@@ -145,7 +147,7 @@ namespace API.Controllers
             };
             await this._emailsCommon.SendMail(data_email);
 
-            return user;
+            return finalresult;
         }
 
         [AllowAnonymous]
@@ -261,7 +263,7 @@ namespace API.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<ActionResult<AppUser>> CreateUsers(RegisterDto data)
+        public async Task<ActionResult<ResultAllUserDto>> CreateUsers(RegisterDto data)
         {
             if (await this._userCommon.UserNameExist(data.Username)) return BadRequest("Username already in used");
 
@@ -285,7 +287,9 @@ namespace API.Controllers
                 UpdatedAt = DateTime.UtcNow,
             };
 
-            this._context.Users.Add(user);
+            var result = this._context.Users.Add(user);
+
+            var finalresult = this._mapper.Map<ResultAllUserDto>(result);
 
             await this._context.SaveChangesAsync();
 
@@ -301,7 +305,7 @@ namespace API.Controllers
             };
             await this._emailsCommon.SendMail(data_email);
 
-            return user;
+            return finalresult;
         }
 
         [HttpPut("edit")]
@@ -402,12 +406,13 @@ namespace API.Controllers
         public async Task<ActionResult<AppUser>> SearchJoin(string keyword)
         {
             try
-            { 
-                keyword = Regex.Replace(keyword, @"[^0-9a-zA-Z\._]", string.Empty);
+            {
+                // keyword = Regex.Replace(keyword, @"[^0-9a-zA-Z\._]", string.Empty);
                 var _user = await this._context.Users.Where((x) => x.Email == keyword && x.Status == (int)StatusEnum.enable && x.Role == (int)RoleEnum.user).FirstOrDefaultAsync();
 
                 if(_user != null) {
-                    return Ok(_user);
+                    var finalresult = this._mapper.Map<ResultAllUserDto>(_user);
+                    return Ok(finalresult);
                 }else{
                     return NotFound("user not found");
                 }
