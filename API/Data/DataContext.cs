@@ -26,5 +26,7 @@ namespace API.Data
         public DbSet<AppPropertyType> PropertyTypes {get; set;}
 
         public DbSet<AppUserProperty> UserProperties {get; set;}
+
+        public DbSet<AppUserBusines> UserBusiness {get; set;}
     }
 }

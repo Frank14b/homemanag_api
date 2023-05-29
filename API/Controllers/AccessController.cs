@@ -26,7 +26,7 @@ namespace API.Controllers
             this._accessCommon = new AccessCommon(context);
         }
 
-        [HttpPost("add")]
+        [HttpPost("")]
         public async Task<ActionResult<AccessResultDto>> CreateAccess(CreateAccessDto data)
         {
             try
@@ -49,7 +49,7 @@ namespace API.Controllers
             }
         }
         
-        [HttpGet("getall")]
+        [HttpGet("")]
         public ActionResult<IEnumerable<AccessListResultDto>> GetAllAccess()
         {
             try
@@ -81,8 +81,8 @@ namespace API.Controllers
             }
         }
 
-        [HttpDelete("delete")]
-        public async Task<ActionResult<DeleteAccessResultDto>> DeleteAccess(DeleteAccessDto data)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<DeleteAccessResultDto>> DeleteAccess(DeleteAccessDto data, int id)
         {
             try
             {
@@ -108,8 +108,8 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("update")]
-        public async Task<ActionResult<AccessResultDto>> UpdateAccess(UpdateAccessDto data)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<AccessResultDto>> UpdateAccess(UpdateAccessDto data, int id)
         {
             try
             {
